@@ -6,7 +6,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pro'Bronze — Painel</title>
+<title>Pro'Ink — Painel</title>
 <link rel="manifest" href="manifest-painel.json">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -14,7 +14,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Pro'Bronze">
+<meta name="apple-mobile-web-app-title" content="Pro'Ink">
 <link rel="stylesheet" href="css/theme.css?v=20260728d">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
@@ -446,7 +446,7 @@
 
     <div id="vencida-bloco-pagamento" style="display:none">
       <h1 style="color:var(--red);font-size:1.1rem">⏰ Seu teste grátis acabou</h1>
-      <p style="margin-bottom:1rem">Pra continuar usando o Pro'Bronze, é só assinar por <strong id="vencida-valor" style="color:var(--accent-light)"></strong>/mês.</p>
+      <p style="margin-bottom:1rem">Pra continuar usando o Pro'Ink, é só assinar por <strong id="vencida-valor" style="color:var(--accent-light)"></strong>/mês.</p>
       <div class="card" style="text-align:left;margin-bottom:1rem">
         <div class="card-titulo">Como pagar</div>
         <div class="ajuda-inline" style="margin-bottom:.6rem">1. Faça um PIX pra chave abaixo<br>2. Mande o comprovante no WhatsApp<br>3. Seu acesso é liberado em seguida</div>
@@ -521,7 +521,7 @@
       </details>
       <div class="card">
         <div class="card-titulo com-ajuda">Nova Cabine / Cama</div>
-        <div class="ajuda-inline">Cada cabine é um espaço físico de bronzeamento (cama ou cabine). Cadastre quantas você tiver — isso define quantas clientes podem ser atendidas ao mesmo tempo.</div>
+        <div class="ajuda-inline">Cada cabine é um espaço físico de tatuagem (cama ou cabine). Cadastre quantas você tiver — isso define quantas clientes podem ser atendidas ao mesmo tempo.</div>
         <div id="cab-form-intro">
           <button class="btn-primario" style="width:auto" id="btn-abrir-form-cabine">+ Adicionar Cabine</button>
         </div>
@@ -733,12 +733,12 @@
       </details>
       <div class="card">
         <div class="card-titulo com-ajuda">Novo Serviço</div>
-        <div class="ajuda-inline">Cadastre aqui os serviços que você oferece (bronzeamento, com óleo essencial, etc.) — eles aparecem como opções de combo no agendamento e na venda avulsa.</div>
+        <div class="ajuda-inline">Cadastre aqui os serviços que você oferece (tatuagem, com óleo essencial, etc.) — eles aparecem como opções de combo no agendamento e na venda avulsa.</div>
         <div id="serv-form-intro">
           <button class="btn-primario" style="width:auto" id="btn-abrir-form-servico">+ Adicionar Serviço</button>
         </div>
         <div id="serv-form-wrap" style="display:none">
-          <div class="input-group"><label>Nome</label><input type="text" id="serv-nome" placeholder="Ex: Bronzeamento"></div>
+          <div class="input-group"><label>Nome</label><input type="text" id="serv-nome" placeholder="Ex: Tatuagem"></div>
           <div class="input-group"><label>Preço (R$)</label><input type="number" id="serv-preco" step="0.01"></div>
           <div class="input-group"><label>Duração (min)</label><input type="number" id="serv-duracao"></div>
           <button class="btn-primario" id="btn-criar-servico">Adicionar Serviço</button>
@@ -777,7 +777,7 @@
       </div>
       <div class="card">
         <div class="card-titulo com-ajuda">Ponto de Equilíbrio</div>
-        <div class="ajuda-inline">Quantas sessões de bronzeamento (pelo ticket médio já pago no mês) cobrem as despesas do mês antes do lucro ficar positivo.</div>
+        <div class="ajuda-inline">Quantas sessões de tatuagem (pelo ticket médio já pago no mês) cobrem as despesas do mês antes do lucro ficar positivo.</div>
         <div style="display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap">
           <div style="flex:1;min-width:160px">
             <div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem">Sessões necessárias no mês</div>
@@ -881,7 +881,7 @@
     <div class="aba-conteudo" id="aba-pacotes">
       <details class="card tutorial-item">
         <summary>🎓 Como usar esta aba</summary>
-        <div class="tutorial-texto">Venda pacotes de várias sessões de uma vez (ex: 10 sessões de bronzeamento). O sistema desconta uma sessão automaticamente a cada atendimento e avisa quando o pacote está acabando ou parado (a cliente sumiu no meio do pacote).</div>
+        <div class="tutorial-texto">Venda pacotes de várias sessões de uma vez (ex: 10 sessões de tatuagem). O sistema desconta uma sessão automaticamente a cada atendimento e avisa quando o pacote está acabando ou parado (a cliente sumiu no meio do pacote).</div>
       </details>
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:.8rem">
@@ -917,7 +917,7 @@
     <div class="aba-conteudo" id="aba-produtos">
       <details class="card tutorial-item">
         <summary>🎓 Como usar esta aba</summary>
-        <div class="tutorial-texto">Registre a venda avulsa de produtos (bronzeador, protetor, óleo etc.) pra uma cliente, fora de uma sessão de bronzeamento. Cada venda desconta automaticamente do estoque cadastrado em Insumos.</div>
+        <div class="tutorial-texto">Registre a venda avulsa de produtos (bronzeador, protetor, óleo etc.) pra uma cliente, fora de uma sessão de tatuagem. Cada venda desconta automaticamente do estoque cadastrado em Insumos.</div>
       </details>
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:.8rem">
@@ -1349,7 +1349,7 @@ import { checarElegibilidade } from './js/agenda.js?v=20260731a';
 import { escutarServicos, criarServico, excluirServico, calcularCombo } from './js/servicos.js?v=20260728d';
 import { escutarClientes, criarCliente, ehAniversarioHoje, excluirCliente, editarCliente } from './js/clientes.js?v=20260728d';
 import { criarMembroEquipe, escutarEquipe, excluirMembroEquipe, editarMembroEquipe } from './js/equipe.js?v=20260729a';
-import { tempoMaxRecomendado, descricaoTipoPele } from './js/ficha-pele.js?v=20260728d';
+import { tempoMaxRecomendado, descricaoTipoPele } from './js/anamnese.js?v=20260728d';
 import { registrarPagamento, escutarPendencias, quitarPendencia, resumoFinanceiro, escutarFinanceiroPeriodo } from './js/financeiro.js?v=20260729a';
 import { criarPacote, escutarPacotesDoNegocio, consumirSessaoDoPacote, excluirPacote, pacoteVencido, diasParado, DIAS_PARADO_ALERTA } from './js/pacotes-sessoes.js?v=20260728d';
 import { criarProdutoCabine, escutarProdutosCabine, produtosEmAlerta, baixarEstoque, somarEstoque, buscarPorCodigoBarras, excluirProdutoCabine, registrarMovimentoProduto, escutarMovimentosProdutos } from './js/produtos-cabine.js?v=20260729a';
@@ -1364,7 +1364,7 @@ import {
   linkSessaoPacoteAtendida,
   linkPacoteParado
 } from './js/whatsapp.js?v=20260728d';
-import { verificarIntervaloMinimo } from './js/ficha-pele.js?v=20260728d';
+import { verificarIntervaloMinimo } from './js/anamnese.js?v=20260728d';
 import { tutorialJaVisto, iniciarTutorial } from './js/tutorial.js?v=20260731c';
 import { DIAS_SEMANA, escutarHorarios, salvarHorarios, validarHorarioFuncionamento } from './js/horarios.js?v=20260728d';
 import { escutarConfigNegocio, salvarConfigNegocio } from './js/config-negocio.js?v=20260729a';
@@ -1458,7 +1458,7 @@ let liquidoMesCache = 0;
 let despesasMesCache = 0;
 let sessoesPagasMesCache = 0;
 
-// Ponto de equilíbrio: quantas sessões de bronzeamento (pelo ticket médio
+// Ponto de equilíbrio: quantas sessões de tatuagem (pelo ticket médio
 // já pago no mês) cobrem os gastos do mês antes do lucro ficar positivo.
 function atualizarPontoEquilibrio() {
   const elNec = $('be-sessoes-necessarias');
@@ -1539,7 +1539,7 @@ $('btn-cancelar-form-despesa').addEventListener('click', () => {
   $('desp-form-wrap').style.display = 'none';
   $('desp-form-intro').style.display = 'block';
 });
-let configNegocioCache = { nome: "Pro'Bronze", whatsappNegocio: '', chavePix: '', vitrineSubtitulo: '', intervaloMinimoHoras: 24, limiteSessoesMes: 12 };
+let configNegocioCache = { nome: "Pro'Ink", whatsappNegocio: '', chavePix: '', vitrineSubtitulo: '', intervaloMinimoHoras: 24, limiteSessoesMes: 12 };
 
 function iniciaisDoNome(nome) {
   const partes = (nome || '').trim().split(/\s+/).filter(Boolean);
@@ -1759,8 +1759,8 @@ function verificarAssinatura(config) {
     if (motivo === 'pagamento') {
       $('vencida-valor').textContent = 'R$' + VALOR_MENSALIDADE;
       $('vencida-pix').value = PIX_PLATAFORMA;
-      const nomeLoja = config.nome || "Pro'Bronze";
-      const textoWpp = `Olá! Fiz o PIX da mensalidade do Pro'Bronze referente à loja "${nomeLoja}". Segue o comprovante:`;
+      const nomeLoja = config.nome || "Pro'Ink";
+      const textoWpp = `Olá! Fiz o PIX da mensalidade do Pro'Ink referente à loja "${nomeLoja}". Segue o comprovante:`;
       $('vencida-whatsapp').href = `https://wa.me/${WHATSAPP_SUPORTE}?text=${encodeURIComponent(textoWpp)}`;
     }
   } else {
@@ -1797,7 +1797,7 @@ function iniciarPainel() {
 
   aplicarPermissoesNav();
 
-  $('link-cadastro-cliente').value = `${window.location.origin}${window.location.pathname.replace('esteticista.html', '')}cadastro-cliente.html?negocio=${negocioId}`;
+  $('link-cadastro-cliente').value = `${window.location.origin}${window.location.pathname.replace('tatuador.html', '')}cadastro-cliente.html?negocio=${negocioId}`;
   // iniciarPainel() roda de novo a cada login (sem recarregar a página) —
   // sem esse "dataset.bound", um logout seguido de login na mesma aba
   // duplicava esse clique (2x copiar, 2x toast, e assim por diante a cada
@@ -1822,10 +1822,10 @@ function iniciarPainel() {
   }
   let linkCadastroEquipe = '';
   function montarLinkEquipe(codigo) {
-    linkCadastroEquipe = `${window.location.origin}${window.location.pathname.replace('esteticista.html', '')}cadastro-equipe.html?negocio=${negocioId}&codigo=${codigo}`;
+    linkCadastroEquipe = `${window.location.origin}${window.location.pathname.replace('tatuador.html', '')}cadastro-equipe.html?negocio=${negocioId}&codigo=${codigo}`;
     $('link-cadastro-equipe').value = linkCadastroEquipe;
     const nomeLoja = configNegocioCache?.nome || '';
-    const textoWppEquipe = `Oi! Segue o link pra você criar seu acesso de funcionário(a) no Pro'Bronze da loja "${nomeLoja}":\n${linkCadastroEquipe}`;
+    const textoWppEquipe = `Oi! Segue o link pra você criar seu acesso de funcionário(a) no Pro'Ink da loja "${nomeLoja}":\n${linkCadastroEquipe}`;
     $('btn-enviar-link-equipe-whatsapp').href = `https://wa.me/?text=${encodeURIComponent(textoWppEquipe)}`;
   }
   if (!$('btn-copiar-link-equipe').dataset.bound) {
@@ -2742,7 +2742,7 @@ $('btn-exportar-excel').addEventListener('click', async () => {
   exportarExcel(
     montarRelatorioFinanceiro(registros), COLUNAS_FINANCEIRO,
     `probronze-financeiro-${$('rel-de').value}-a-${$('rel-ate').value}`,
-    { nomeLoja: configNegocioCache?.nome || "Pro'Bronze", periodoTexto }
+    { nomeLoja: configNegocioCache?.nome || "Pro'Ink", periodoTexto }
   );
 });
 
@@ -2755,7 +2755,7 @@ $('btn-exportar-pdf').addEventListener('click', async () => {
     registros,
     `Relatório Financeiro — ${periodoTexto}`,
     `probronze-financeiro-${$('rel-de').value}-a-${$('rel-ate').value}`,
-    { nomeLoja: configNegocioCache?.nome || "Pro'Bronze", periodoTexto }
+    { nomeLoja: configNegocioCache?.nome || "Pro'Ink", periodoTexto }
   );
 });
 
@@ -2879,7 +2879,7 @@ function renderPacotes(pacotes) {
   const wrap = $('lista-pacotes');
   const ativos = pacotes.filter((p) => p.status === 'ativo');
   if (ativos.length === 0) { wrap.innerHTML = '<div class="empty-state">Nenhum pacote ativo.</div>'; return; }
-  const nomeNegocio = configNegocioCache?.nome || "Pro'Bronze";
+  const nomeNegocio = configNegocioCache?.nome || "Pro'Ink";
   wrap.innerHTML = ativos.map((p) => {
     const restantes = p.totalSessoes - p.sessoesUsadas;
     const acabando = restantes <= 1;
@@ -3171,7 +3171,7 @@ function renderAniversariantes(clientes) {
   const card = $('card-aniversariantes');
   if (aniversariantes.length === 0) { card.style.display = 'none'; return; }
   card.style.display = 'block';
-  const nomeNegocio = configNegocioCache?.nome || "Pro'Bronze";
+  const nomeNegocio = configNegocioCache?.nome || "Pro'Ink";
   $('lista-aniversariantes').innerHTML = aniversariantes.map((c) => `
     <div class="agendamento-item">
       <div class="agendamento-info">
@@ -3190,7 +3190,7 @@ function renderClientes(clientes) {
     <div class="agendamento-item nome-clicavel" data-abrir-menu-cliente="${c.id}">
       <div class="agendamento-info" style="min-width:0;flex:1">
         <div class="nome">${escapeHtml(c.nome)} 💬</div>
-        <div class="detalhe">${escapeHtml(c.whatsapp) || 'sem WhatsApp'}${c.fichaPele ? ' · ' + (descricaoTipoPele(c.fichaPele.tipoFitzpatrick) || 'ficha de pele preenchida') : ' · sem ficha de pele'}</div>
+        <div class="detalhe">${escapeHtml(c.whatsapp) || 'sem WhatsApp'}${c.fichaPele ? ' · ' + (descricaoTipoPele(c.fichaPele.tipoFitzpatrick) || 'anamnese preenchida') : ' · sem anamnese'}</div>
         ${c.observacoes ? `<div class="detalhe" style="margin-top:.25rem;color:var(--accent-light);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">📝 ${escapeHtml(c.observacoes)}</div>` : ''}
       </div>
     </div>
@@ -3558,7 +3558,7 @@ $('btn-baixar-qr-pdf').addEventListener('click', () => {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const W = 210, H = 297;
-  const nomeLoja = configNegocioCache?.nome || "Pro'Bronze";
+  const nomeLoja = configNegocioCache?.nome || "Pro'Ink";
   const link = $('link-cadastro-cliente').value;
 
   const bg = [26, 20, 16];
@@ -3598,7 +3598,7 @@ $('btn-baixar-qr-pdf').addEventListener('click', () => {
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(14);
   doc.setTextColor(...cinza);
-  doc.text('Agende sua sessão de bronzeamento em segundos', W / 2, 88, { align: 'center' });
+  doc.text('Agende sua sessão de tatuagem em segundos', W / 2, 88, { align: 'center' });
 
   doc.setDrawColor(...accent);
   doc.setLineWidth(0.5);
@@ -3660,7 +3660,7 @@ $('btn-baixar-qr-pdf').addEventListener('click', () => {
   y += linkLinhas.length * 4.2 + 5;
   doc.setFontSize(7.5);
   doc.setTextColor(...cinza);
-  doc.text("Cadastro rápido e gratuito — feito com Pro'Bronze", W / 2, y, { align: 'center' });
+  doc.text("Cadastro rápido e gratuito — feito com Pro'Ink", W / 2, y, { align: 'center' });
 
   doc.save(`qrcode-agendamento-${nomeLoja.replace(/\s+/g, '-')}.pdf`);
 });
@@ -3717,7 +3717,7 @@ $('btn-confirmar-venda').addEventListener('click', async () => {
     $('modal-vender-produto').style.display = 'none';
     destravarPagamento('modal-vender-produto', 'btn-confirmar-venda');
     abrirModalComprovante({
-      nomeLoja: configNegocioCache?.nome || "Pro'Bronze",
+      nomeLoja: configNegocioCache?.nome || "Pro'Ink",
       clienteNome: cliente?.nome || '',
       clienteWhatsapp: cliente?.whatsapp || '',
       descricao: `${quantidade}x ${produto?.nome || 'produto'}`,
@@ -4309,7 +4309,7 @@ function atualizarCentralAvisos() {
   });
   clientesSemFichaComAgendamento.forEach((clienteId) => {
     const cliente = clientesCache.find((c) => c.id === clienteId);
-    avisos.push({ id: `ficha-pele-${clienteId}`, texto: `📋 ${cliente.nome} tem agendamento hoje sem ficha de pele preenchida.`, aba: 'clientes' });
+    avisos.push({ id: `ficha-pele-${clienteId}`, texto: `📋 ${cliente.nome} tem agendamento hoje sem anamnese preenchida.`, aba: 'clientes' });
   });
 
   const visiveis = avisos.filter((a) => !avisosDispensados.has(a.id));
@@ -4502,10 +4502,10 @@ $('btn-confirmar-pagamento').addEventListener('click', async () => {
       statusPagamento
     });
     comprovantePendente = {
-      nomeLoja: configNegocioCache?.nome || "Pro'Bronze",
+      nomeLoja: configNegocioCache?.nome || "Pro'Ink",
       clienteNome: clienteDaSessao?.nome || '',
       clienteWhatsapp: clienteDaSessao?.whatsapp || '',
-      descricao: 'Sessão de bronzeamento',
+      descricao: 'Sessão de tatuagem',
       valor: sessao.valorBruto - desconto,
       formaPagamento: rotuloFormaPagamento
     };

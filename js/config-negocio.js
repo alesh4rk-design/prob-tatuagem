@@ -1,12 +1,12 @@
-// Pro'Bronze — Configurações do negócio (nome, contato, regras de segurança)
+// Pro'Ink — Configurações do negócio (nome, contato, regras de segurança)
 import { db } from "./firebase-config.js?v=20260728d";
 import { doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 import { notificarErroFirestore } from "./firestore-erro.js?v=20260728d";
-import { INTERVALO_MINIMO_HORAS_PADRAO, LIMITE_SESSOES_MES_PADRAO } from "./ficha-pele.js?v=20260728d";
+import { INTERVALO_MINIMO_HORAS_PADRAO, LIMITE_SESSOES_MES_PADRAO } from "./anamnese.js?v=20260728d";
 
 export function configPadrao() {
   return {
-    nome: "Pro'Bronze",
+    nome: "Pro'Ink",
     whatsappNegocio: "",
     chavePix: "",
     vitrineSubtitulo: "Olá! Acompanhe suas sessões por aqui.",
@@ -19,7 +19,7 @@ export function configPadrao() {
     // Código secreto do link de autocadastro de equipe — diferente do
     // negocioId (que é público, vai impresso no QR Code do link da
     // cliente), pra ninguém conseguir virar recepcionista só de saber o
-    // negocioId. Ver esteticista.html (gera/regenera) e firestore.rules
+    // negocioId. Ver tatuador.html (gera/regenera) e firestore.rules
     // (valida no create de "usuarios").
     codigoConviteEquipe: ""
   };

@@ -1,4 +1,4 @@
-// Pro'Bronze — Pacotes de Sessões (adaptação de "Acordos com Cliente" do Pro'B)
+// Pro'Ink — Pacotes de Sessões (adaptação de "Acordos com Cliente" do Pro'B)
 import { db } from "./firebase-config.js?v=20260728d";
 import {
   collection, doc, addDoc, updateDoc, deleteDoc, getDoc,

@@ -1,7 +1,7 @@
 {
-  "name": "Pro'Bronze — Área da Cliente",
-  "short_name": "Pro'Bronze",
-  "description": "Agende suas sessões de bronzeamento e acompanhe seus pacotes",
+  "name": "Pro'Ink — Área da Cliente",
+  "short_name": "Pro'Ink",
+  "description": "Agende suas sessões de tatuagem e acompanhe seus pacotes",
   "start_url": "./cliente.html",
   "scope": "./",
   "display": "standalone",

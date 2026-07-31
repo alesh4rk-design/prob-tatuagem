@@ -1,6 +1,8 @@
-// Pro'Bronze — Firebase Config
-// Projeto: pro-b-bronze | Firestore: southamerica-east1
-// SUBSTITUA pelos valores reais do Firebase Console (Configurações do projeto > SDK config)
+// Pro'Ink — Firebase Config
+// ATENÇÃO: ainda aponta pro projeto Firebase do Pro'Bronze (pro-b-bronze) como placeholder.
+// Antes de qualquer teste real, crie um projeto Firebase separado pro Pro'Ink e troque os
+// valores abaixo pelos dele (Firebase Console > Configurações do projeto > SDK config) —
+// usar o projeto do Pro'Bronze aqui gravaria dados de tatuagem no banco de produção errado.
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";

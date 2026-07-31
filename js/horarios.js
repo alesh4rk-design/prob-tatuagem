@@ -1,4 +1,4 @@
-// Pro'Bronze — Horário de Funcionamento
+// Pro'Ink — Horário de Funcionamento
 // Guardado numa coleção própria (não dentro do doc do negócio) de propósito:
 // assim dá pra restringir a leitura só ao dono nas regras do Firestore, sem
 // bloquear o resto do doc "negocios" que a equipe também precisa ler.

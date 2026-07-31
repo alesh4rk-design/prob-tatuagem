@@ -1,6 +1,6 @@
-// Pro'Bronze — Notificação por WhatsApp
+// Pro'Ink — Notificação por WhatsApp
 // Sem integração paga de API — gera links wa.me com mensagem pronta,
-// que a esteticista/recepcionista clica pra abrir o WhatsApp Web/app
+// que a tatuador(a)/recepcionista clica pra abrir o WhatsApp Web/app
 // já com o texto preenchido, pronto pra enviar.
 
 function limparNumero(numero) {

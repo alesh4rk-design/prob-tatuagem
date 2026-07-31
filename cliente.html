@@ -6,7 +6,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pro'Bronze — Área da Cliente</title>
+<title>Pro'Ink — Área da Cliente</title>
 <link rel="manifest" href="manifest-cliente.json">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -14,7 +14,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Pro'Bronze">
+<meta name="apple-mobile-web-app-title" content="Pro'Ink">
 <link rel="stylesheet" href="css/theme.css?v=20260728d">
 <style>
   * { box-sizing: border-box; }
@@ -179,7 +179,7 @@
   <main>
     <header class="topo-cliente">
       <div id="vitrine-logo" style="font-size:2.2rem;margin-bottom:.3rem;line-height:1">☀️</div>
-      <h1 id="vitrine-titulo">Pro'Bronze</h1>
+      <h1 id="vitrine-titulo">Pro'Ink</h1>
       <p id="vitrine-subtitulo">Olá! Acompanhe suas sessões por aqui.</p>
       <div id="contato-estabelecimento" style="margin-top:.4rem"></div>
     </header>
@@ -262,7 +262,7 @@ let servicosCache = [];
 let combosSelecionados = new Set();
 let clienteAtual = null;
 let cabinesCache = [];
-let configNegocioCache = { nome: "Pro'Bronze", whatsappNegocio: '', chavePix: '', vitrineSubtitulo: '', intervaloMinimoHoras: 24, limiteSessoesMes: 12 };
+let configNegocioCache = { nome: "Pro'Ink", whatsappNegocio: '', chavePix: '', vitrineSubtitulo: '', intervaloMinimoHoras: 24, limiteSessoesMes: 12 };
 let horariosCache = null;
 let dataEscolhida = null;
 let horaEscolhida = null;
@@ -379,7 +379,7 @@ $('btn-sair-cliente').addEventListener('click', async () => {
 
 // Aplica a personalização visual do estúdio (cor + logo/ícone) só na área
 // já logada da cliente — a tela de login é anterior a sabermos de qual
-// negócio se trata, então continua com a marca padrão do Pro'Bronze.
+// negócio se trata, então continua com a marca padrão do Pro'Ink.
 function hexParaRgb(hex) {
   const limpo = (hex || '').replace('#', '');
   if (limpo.length !== 6) return null;

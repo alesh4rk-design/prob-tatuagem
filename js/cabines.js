@@ -1,4 +1,4 @@
-// Pro'Bronze — Controle de Cabines/Camas
+// Pro'Ink — Controle de Cabines/Camas
 import { db } from "./firebase-config.js?v=20260728d";
 import {
   collection, doc, addDoc, updateDoc, deleteDoc,

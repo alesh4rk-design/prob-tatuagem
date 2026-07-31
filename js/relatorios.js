@@ -1,4 +1,4 @@
-// Pro'Bronze — Relatórios Excel/PDF
+// Pro'Ink — Relatórios Excel/PDF
 // Depende de SheetJS (xlsx), jsPDF+autotable e Chart.js, carregados via CDN
 // no HTML. O PDF é pensado como relatório EXECUTIVO (resumo + gráficos,
 // sem listar cliente por cliente) — muita gente usa esse PDF pra apresentar
@@ -104,7 +104,7 @@ export function exportarExcel(linhas, colunas, nomeArquivo, meta = {}) {
   const livro = XLSX.utils.book_new();
 
   const linhasResumo = [
-    ["Pro'Bronze — Relatório Financeiro"],
+    ["Pro'Ink — Relatório Financeiro"],
     [meta.nomeLoja || ''],
     [`Período: ${meta.periodoTexto || ''}`],
     [`Gerado em: ${geradoEm}`],
@@ -171,7 +171,7 @@ export function exportarPDF(registros, titulo, nomeArquivo, meta = {}) {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(17);
   doc.setTextColor(...accentLight);
-  doc.text(meta.nomeLoja || "Pro'Bronze", 14, 20);
+  doc.text(meta.nomeLoja || "Pro'Ink", 14, 20);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(9);
   doc.setTextColor(...textoClaro);
@@ -258,7 +258,7 @@ export function exportarPDF(registros, titulo, nomeArquivo, meta = {}) {
     doc.setFontSize(7.5);
     doc.setTextColor(...cinza);
     doc.text(
-      "Documento gerado automaticamente pelo Pro'Bronze a partir dos pagamentos registrados no sistema — não substitui obrigações fiscais.",
+      "Documento gerado automaticamente pelo Pro'Ink a partir dos pagamentos registrados no sistema — não substitui obrigações fiscais.",
       margemX, H - 8, { maxWidth: W - margemX * 2 }
     );
     doc.text(`Página ${p} de ${totalPaginas}`, W - margemX, H - 8, { align: 'right' });

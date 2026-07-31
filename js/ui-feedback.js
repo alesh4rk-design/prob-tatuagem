@@ -1,4 +1,4 @@
-// Pro'Bronze — Feedback visual (toast + confirmação), substitui alert()/confirm() nativos
+// Pro'Ink — Feedback visual (toast + confirmação), substitui alert()/confirm() nativos
 
 function garantirContainerToast() {
   let el = document.getElementById('toast-container');

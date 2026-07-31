@@ -1,4 +1,4 @@
-// Pro'Bronze — Cupons e Promoções
+// Pro'Ink — Cupons e Promoções
 import { db } from "./firebase-config.js?v=20260728d";
 import {
   collection, doc, addDoc, updateDoc, deleteDoc, increment,

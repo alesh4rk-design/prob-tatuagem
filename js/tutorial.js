@@ -1,4 +1,4 @@
-// Pro'Bronze — Tutorial guiado do painel (roda uma vez por usuário, no navegador dele)
+// Pro'Ink — Tutorial guiado do painel (roda uma vez por usuário, no navegador dele)
 const PASSOS = [
   { aba: "cabines", titulo: "🛏️ Cabines", texto: "Aqui você vê cada cabine/cama: verde é livre, vermelho é ocupada, amarelo é manutenção. Toque numa cabine livre pra colocá-la em manutenção, se precisar." },
   { aba: "agenda", titulo: "📅 Agenda do Dia", texto: "Mostra tudo que está marcado pra hoje. Toque em 'Iniciar' pra começar o cronômetro da sessão daquela cliente." },

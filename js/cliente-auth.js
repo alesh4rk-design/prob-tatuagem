@@ -1,4 +1,4 @@
-// Pro'Bronze — Autocadastro da cliente (cria login próprio vinculado ao negócio)
+// Pro'Ink — Autocadastro da cliente (cria login próprio vinculado ao negócio)
 import { auth, db } from "./firebase-config.js?v=20260728d";
 import {
   createUserWithEmailAndPassword

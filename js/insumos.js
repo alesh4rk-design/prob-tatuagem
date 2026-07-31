@@ -1,4 +1,4 @@
-// Pro'Bronze — Insumos (itens de uso interno: creme, papel toalha, água
+// Pro'Ink — Insumos (itens de uso interno: creme, papel toalha, água
 // oxigenada etc.) Diferente de "Produtos", não tem preço de venda nem é
 // pra vender — é só pra controlar o gasto necessário pro funcionamento.
 import { db } from "./firebase-config.js?v=20260728d";

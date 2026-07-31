@@ -1,8 +1,8 @@
 {
-  "name": "Pro'Bronze — Painel",
-  "short_name": "Pro'Bronze",
-  "description": "Painel de gestão do studio de bronzeamento",
-  "start_url": "./esteticista.html",
+  "name": "Pro'Ink — Painel",
+  "short_name": "Pro'Ink",
+  "description": "Painel de gestão do studio de tatuagem",
+  "start_url": "./tatuador.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",

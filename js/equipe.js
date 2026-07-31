@@ -1,4 +1,4 @@
-// Pro'Bronze — Equipe (dono cria contas de recepcionista)
+// Pro'Ink — Equipe (dono cria contas de recepcionista)
 import { auth, db } from "./firebase-config.js?v=20260728d";
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
@@ -7,6 +7,8 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 import { notificarErroFirestore } from "./firestore-erro.js?v=20260728d";
 
+// ATENÇÃO: mesma config placeholder do Pro'Bronze usada em firebase-config.js —
+// troque as duas juntas quando o projeto Firebase do Pro'Ink for criado.
 const firebaseConfig = {
   apiKey: "AIzaSyCd43MswTK67CbddpLLyWNou8uTv9W3Chc",
   authDomain: "pro-b-bronze.firebaseapp.com",
@@ -38,7 +40,7 @@ export async function criarMembroEquipe(negocioId, { nome, email, senha, papel =
 // auth principal porque, diferente do dono cadastrando alguém, aqui é a
 // própria pessoa se cadastrando (não precisa preservar sessão de ninguém).
 // Papel sempre "recepcionista", sem depender de nenhum valor vindo da URL.
-// "codigo" é o código secreto do convite (ver esteticista.html) — as regras
+// "codigo" é o código secreto do convite (ver tatuador.html) — as regras
 // do Firestore conferem que ele bate com o codigoConviteEquipe salvo no
 // negócio; sem isso, bastava saber o negocioId (que é público, vai
 // impresso no QR Code do link da cliente) pra virar recepcionista de

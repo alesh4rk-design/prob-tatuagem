@@ -1,4 +1,4 @@
-// Pro'Bronze — Agenda (online + presencial), combo de serviços,
+// Pro'Ink — Agenda (online + presencial), combo de serviços,
 // integrando ficha de pele e regras de segurança
 import { db } from "./firebase-config.js?v=20260728d";
 import {
@@ -7,7 +7,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 import {
   verificarIntervaloMinimo, verificarLimiteMensal, tempoMaxRecomendado
-} from "./ficha-pele.js?v=20260728d";
+} from "./anamnese.js?v=20260728d";
 import { notificarErroFirestore } from "./firestore-erro.js?v=20260728d";
 
 // status: "agendado" | "em_andamento" | "concluido" | "cancelado" | "faltou"

@@ -1,4 +1,4 @@
-// Pro'Bronze — Despesas do negócio (salário, aluguel, contas, manutenção, obra etc.)
+// Pro'Ink — Despesas do negócio (salário, aluguel, contas, manutenção, obra etc.)
 import { db } from "./firebase-config.js?v=20260728d";
 import {
   collection, doc, addDoc, deleteDoc, onSnapshot, query, where, serverTimestamp

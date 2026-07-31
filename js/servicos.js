@@ -1,4 +1,4 @@
-// Pro'Bronze — Serviços (usados para montar combo no agendamento)
+// Pro'Ink — Serviços (usados para montar combo no agendamento)
 import { db } from "./firebase-config.js?v=20260728d";
 import {
   collection, doc, addDoc, updateDoc, deleteDoc,

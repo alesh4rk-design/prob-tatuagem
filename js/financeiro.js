@@ -1,4 +1,4 @@
-// Pro'Bronze — Financeiro: pagamentos, pendências, desconto
+// Pro'Ink — Financeiro: pagamentos, pendências, desconto
 import { db } from "./firebase-config.js?v=20260728d";
 import {
   collection, doc, addDoc, updateDoc, getDocs,

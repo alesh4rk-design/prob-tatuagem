@@ -1,4 +1,4 @@
-// Pro'Bronze — Produtos de Cabine (adaptação de "Controle de Insumos" do Pro'B)
+// Pro'Ink — Produtos de Cabine (adaptação de "Controle de Insumos" do Pro'B)
 import { db } from "./firebase-config.js?v=20260728d";
 import {
   collection, doc, addDoc, updateDoc, deleteDoc, increment,
