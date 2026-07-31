@@ -415,7 +415,7 @@
   <div class="login-card-wrap" id="login-card-wrap">
   <div class="login-card">
     <div id="login-nome-loja" style="display:none"></div>
-    <h1><span class="marca-pro">Pro</span><span class="marca-apo">'</span>Bronze</h1>
+    <h1><span class="marca-pro">Pro</span><span class="marca-apo">'</span>Ink</h1>
     <div style="font-size:.68rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.3rem">Sistema de Gerenciamento de Serviços</div>
     <div class="input-group"><label>E-mail</label><input type="email" id="login-email" autocomplete="username"></div>
     <div class="input-group"><label>Senha</label><input type="password" id="login-senha" autocomplete="current-password"></div>
@@ -464,7 +464,7 @@
   <header class="topo">
     <div style="display:flex;align-items:center;gap:.6rem">
       <button class="btn-menu" id="btn-abrir-menu" aria-label="Abrir menu">☰</button>
-      <div class="marca"><span class="marca-pro">Pro</span><span class="marca-apo">'</span>Bronze</div>
+      <div class="marca"><span class="marca-pro">Pro</span><span class="marca-apo">'</span>Ink</div>
     </div>
     <div style="display:flex;align-items:center;gap:.6rem">
       <div class="avatar-iniciais" id="avatar-iniciais" title=""></div>
@@ -479,7 +479,7 @@
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
     <nav class="sidebar" id="sidebar">
       <div class="sidebar-cabecalho">
-        <div class="marca"><span class="marca-pro">Pro</span><span class="marca-apo">'</span>Bronze</div>
+        <div class="marca"><span class="marca-pro">Pro</span><span class="marca-apo">'</span>Ink</div>
         <button class="btn-menu" id="btn-fechar-menu" aria-label="Fechar menu">✕</button>
       </div>
       <div class="nav-secao">
@@ -4660,7 +4660,7 @@ function montarComprovantePdfBlob({ nomeLoja, clienteNome, descricao, valor, for
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(7.5);
   doc.setTextColor(150, 135, 120);
-  doc.text('Recibo interno de controle, sem validade fiscal. Gerado pelo sistema Pro\'Bronze.', W / 2, y, { align: 'center', maxWidth: W - 24 });
+  doc.text('Recibo interno de controle, sem validade fiscal. Gerado pelo sistema Pro\'Ink.', W / 2, y, { align: 'center', maxWidth: W - 24 });
 
   return doc.output('blob');
 }

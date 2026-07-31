@@ -158,7 +158,7 @@
   <div id="tela-login-raios"></div>
   <div class="login-card-wrap">
   <div class="login-card">
-    <h1><span class="marca-pro">Pro</span><span class="marca-apo">'</span>Bronze</h1>
+    <h1><span class="marca-pro">Pro</span><span class="marca-apo">'</span>Ink</h1>
     <p>Área da Cliente</p>
     <div class="input-group"><label>E-mail</label><input type="email" id="login-email" autocomplete="username"></div>
     <div class="input-group"><label>Senha</label><input type="password" id="login-senha" autocomplete="current-password"></div>
@@ -421,7 +421,7 @@ function renderContatoEstabelecimento(config) {
   const linhas = [];
   if (config.whatsappNegocio) {
     const numero = String(config.whatsappNegocio).replace(/\D/g, '');
-    const msg = encodeURIComponent(`Olá! Sou cliente da ${config.nome || 'Pro\'Bronze'} e gostaria de falar com você.`);
+    const msg = encodeURIComponent(`Olá! Sou cliente da ${config.nome || 'Pro\'Ink'} e gostaria de falar com você.`);
     linhas.push(`<a href="https://wa.me/55${numero}?text=${msg}" target="_blank" class="detalhe" style="display:block;text-decoration:none;color:inherit">📱 Chamar no WhatsApp</a>`);
   }
   if (config.chavePix) {
