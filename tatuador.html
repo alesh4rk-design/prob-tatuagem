@@ -488,6 +488,10 @@
         <button class="aba-btn" data-aba="agenda" data-titulo="📅 Agenda do Dia"><span class="nav-icone">📅</span>Agenda do Dia</button>
       </div>
       <div class="nav-secao">
+        <div class="nav-titulo">Projetos</div>
+        <button class="aba-btn" data-aba="projetos" data-titulo="🖋️ Projetos"><span class="nav-icone">🖋️</span>Projetos</button>
+      </div>
+      <div class="nav-secao">
         <div class="nav-titulo">Catálogo</div>
         <button class="aba-btn" data-aba="servicos" data-titulo="🎀 Meus Serviços"><span class="nav-icone">🎀</span>Meus Serviços</button>
         <button class="aba-btn" data-aba="produtos" data-titulo="🧴 Venda de Produtos"><span class="nav-icone">🧴</span>Venda de Produtos</button>
@@ -913,6 +917,48 @@
         <button class="btn-secundario" style="width:100%;margin-top:.5rem" id="btn-cancelar-cadastro-pacote">Cancelar</button>
       </div>
     </div>
+    <!-- ABA PROJETOS -->
+    <div class="aba-conteudo" id="aba-projetos">
+      <details class="card tutorial-item">
+        <summary>🎓 Como usar esta aba</summary>
+        <div class="tutorial-texto">Cadastre cada tatuagem como um projeto. "Flash" é desenho pronto com preço fechado, já nasce pronto pra agendar. "Custom" passa pelas etapas: orçamento → sinal pago → desenho aprovado → sessão agendada → finalizado. Registre pagamentos aqui pra acompanhar o saldo restante de cada projeto.</div>
+      </details>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:.8rem">
+          <div class="card-titulo" style="margin-bottom:0">Projetos</div>
+          <button class="btn-primario" style="width:auto" id="btn-abrir-cadastro-projeto">+ Novo Projeto</button>
+        </div>
+        <div id="lista-projetos"><div class="empty-state">Carregando...</div></div>
+      </div>
+    </div>
+
+    <!-- Modal Cadastrar Projeto -->
+    <div id="modal-cadastro-projeto" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:55;align-items:center;justify-content:center;padding:1rem">
+      <div class="card" style="max-width:420px;width:100%;max-height:90vh;overflow-y:auto">
+        <div class="card-titulo">Novo Projeto</div>
+        <div class="input-group">
+          <label>Cliente</label>
+          <select id="proj-cliente"><option value="">Selecione...</option></select>
+        </div>
+        <div class="input-group">
+          <label>Artista (opcional)</label>
+          <select id="proj-artista"><option value="">Sem artista definido</option></select>
+        </div>
+        <div class="input-group">
+          <label>Tipo</label>
+          <select id="proj-tipo">
+            <option value="flash">Flash (desenho pronto, preço fechado)</option>
+            <option value="custom">Custom (desenho sob medida, por etapas)</option>
+          </select>
+        </div>
+        <div class="input-group"><label>Descrição</label><input type="text" id="proj-descricao" placeholder="Ex: braço fechado, estilo blackwork"></div>
+        <div class="input-group"><label>Valor total (R$)</label><input type="number" id="proj-valor-total" step="0.01"></div>
+        <div class="input-group"><label>Sinal (R$, opcional)</label><input type="number" id="proj-sinal" step="0.01"></div>
+        <button class="btn-primario" id="btn-criar-projeto">Criar Projeto</button>
+        <button class="btn-secundario" style="width:100%;margin-top:.5rem" id="btn-cancelar-cadastro-projeto">Cancelar</button>
+      </div>
+    </div>
+
     <!-- ABA PRODUTOS -->
     <div class="aba-conteudo" id="aba-produtos">
       <details class="card tutorial-item">
@@ -1352,6 +1398,7 @@ import { criarMembroEquipe, escutarEquipe, excluirMembroEquipe, editarMembroEqui
 import { tempoMaxRecomendado, descricaoTipoPele } from './js/anamnese.js?v=20260728d';
 import { registrarPagamento, escutarPendencias, quitarPendencia, resumoFinanceiro, escutarFinanceiroPeriodo } from './js/financeiro.js?v=20260729a';
 import { criarPacote, escutarPacotesDoNegocio, consumirSessaoDoPacote, excluirPacote, pacoteVencido, diasParado, DIAS_PARADO_ALERTA } from './js/pacotes-sessoes.js?v=20260728d';
+import { initAbaProjetos } from './js/ui-projetos.js?v=20260731a';
 import { criarProdutoCabine, escutarProdutosCabine, produtosEmAlerta, baixarEstoque, somarEstoque, buscarPorCodigoBarras, excluirProdutoCabine, registrarMovimentoProduto, escutarMovimentosProdutos } from './js/produtos-cabine.js?v=20260729a';
 import { criarInsumo, escutarInsumos, reporInsumo, darBaixaInsumo, excluirInsumo, insumosEmAlerta, buscarInsumoPorCodigoBarras, registrarMovimentoInsumo, escutarMovimentosInsumos } from './js/insumos.js?v=20260729a';
 import { criarCupom, escutarCupons, desativarCupom, calcularDescontoCupom, registrarUsoCupom } from './js/cupons.js?v=20260729a';
@@ -1905,6 +1952,14 @@ function iniciarPainel() {
     preencherSelectPacoteCliente(clientes);
     atualizarCentralAvisos();
   }));
+
+  initAbaProjetos({
+    negocioId,
+    getClientesCache: () => clientesCache,
+    getEquipeCache: () => equipeCache,
+    listenersAtivos,
+    toast
+  });
 
   listenersAtivos.push(escutarPacotesDoNegocio(negocioId, (pacotes) => {
     pacotesCache = pacotes;
