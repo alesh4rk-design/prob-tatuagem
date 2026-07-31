@@ -1,0 +1,255 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null && request.auth.uid == 'GfWnHPvjPjXUgmGjUbuRtdvLtpX2';
+    }
+    function isOwner(bId) {
+      return request.auth != null && request.auth.uid == bId;
+    }
+
+    // ── Configurações globais do sistema (PIX, WhatsApp, preço padrão) ──
+    match /config/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ── Barbearias ──
+    match /barbeiros/{bId} {
+      // Leitura pública: necessária p/ tela do cliente, painel de chamada (TV)
+      // e o link de acesso do funcionário — nenhum desses tem login próprio.
+      allow read: if true;
+
+      // Só o próprio dono (autenticado com o mesmo UID do documento) ou o admin
+      // podem criar/editar a barbearia.
+      allow create, update: if isOwner(bId) || isAdmin();
+      allow delete: if isAdmin();
+
+      match /config/{doc} {
+        allow read: if true;
+        allow write: if isOwner(bId) || isAdmin();
+      }
+      match /bloqueios/{doc} {
+        allow read: if true;
+        allow write: if isOwner(bId) || isAdmin();
+      }
+      match /promocoes/{doc} {
+        allow read: if true;
+        allow create, delete: if isOwner(bId) || isAdmin();
+        // Dono edita qualquer campo. Cliente (sem login) só pode incrementar
+        // "usosFeitos" em exatamente 1 por vez, ao resgatar um cupom — nada
+        // além disso. (Regra antiga validava um campo "usado" que não existe
+        // mais no app desde que os cupons viraram usosFeitos/limiteUsos —
+        // isso fazia o resgate real sempre ser rejeitado, e o contador nunca
+        // incrementava, então um cupom "de uso único" podia ser reaplicado
+        // sem limite.)
+        allow update: if isOwner(bId) || isAdmin()
+                      || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['usosFeitos'])
+                          && request.resource.data.usosFeitos == (resource.data.usosFeitos || 0) + 1);
+      }
+      match /fidelidade/{doc} {
+        allow read: if true;
+        allow write: if isOwner(bId) || isAdmin();
+      }
+      match /clientes/{doc} {
+        allow read: if true;
+        // Criado/atualizado tanto pelo dono quanto pelo modo funcionário (sem
+        // login próprio) sempre que um corte é concluído — por isso não exige
+        // auth, só valida o formato dos campos. Delete é ação separada (não
+        // "write" genérico), porque numa exclusão request.resource é nulo e
+        // essas validações de formato sempre dariam falso, bloqueando o dono
+        // de sempre — é exatamente o que travava a Zona de Perigo.
+        allow create, update: if request.resource.data.nome is string
+                    && request.resource.data.nome.size() < 100
+                    && request.resource.data.wpp is string
+                    && request.resource.data.wpp.size() < 20;
+        allow delete: if isOwner(bId) || isAdmin();
+      }
+      // Vendas de produtos, estoque e insumos — dados só do painel do dono,
+      // nunca lidos pela tela pública da cliente ou pelo painel de chamada.
+      match /vendas/{doc} {
+        allow read, write: if isOwner(bId) || isAdmin();
+      }
+      match /produtos/{doc} {
+        allow read, write: if isOwner(bId) || isAdmin();
+      }
+      match /movimentosEstoque/{doc} {
+        allow read, write: if isOwner(bId) || isAdmin();
+      }
+      // Controle de pagamento de comissão de cada mês (quando foi marcado
+      // como pago, pra qual funcionário e qual valor) — só o dono mexe.
+      match /pagamentosComissao/{doc} {
+        allow read, write: if isOwner(bId) || isAdmin();
+      }
+      match /insumos/{doc} {
+        allow read, write: if isOwner(bId) || isAdmin();
+      }
+      match /movimentosInsumos/{doc} {
+        allow read, write: if isOwner(bId) || isAdmin();
+      }
+      match /gastosInsumos/{doc} {
+        allow read, write: if isOwner(bId) || isAdmin();
+      }
+      // Acordos fixos com cliente ("aba Acordos com Cliente") — não tinha
+      // NENHUMA regra pra essa subcoleção, então toda ação (criar, marcar
+      // uso, encerrar) dava permission-denied por padrão.
+      match /acordosCliente/{doc} {
+        allow read, write: if isOwner(bId) || isAdmin();
+      }
+
+      // Comissão de cada barbeiro (%) — fica separada do array "equipe" no
+      // doc público de barbeiros/{bId} de propósito: esse doc é lido sem
+      // login por qualquer visitante (tela do cliente), e comissão é dado
+      // interno do negócio. Cada barbeiro só lê a própria comissão (pra
+      // calcular os "Meus Ganhos" no painel restrito dele); só o dono edita.
+      match /comissoes/{equipeId} {
+        allow read: if isOwner(bId) || isAdmin()
+                    || (request.auth != null
+                        && exists(/databases/$(database)/documents/funcionarios/$(request.auth.uid))
+                        && get(/databases/$(database)/documents/funcionarios/$(request.auth.uid)).data.bId == bId
+                        && get(/databases/$(database)/documents/funcionarios/$(request.auth.uid)).data.equipeId == equipeId);
+        allow write: if isOwner(bId) || isAdmin();
+      }
+
+      // Login da equipe (funcionário/recepcionista) — criado uma vez no
+      // autocadastro pelo link de convite (a própria pessoa, autenticada
+      // com o uid novo, grava seu próprio registro), lido a cada login
+      // (pela própria pessoa) e ativado/desativado/removido pelo dono.
+      // ATENÇÃO: não havia regra nenhuma pra essa subcoleção — se o que
+      // está publicado no console for igual a este arquivo, o login da
+      // equipe está com acesso negado por padrão. Confirme testando.
+      match /equipeAuth/{equipeId} {
+        // "get" (leitura de UM doc) precisa ser público: a tela de convite
+        // roda ANTES de a pessoa ter login (é a primeira vez dela no
+        // sistema), e ela precisa conferir se aquele convite específico já
+        // foi aceito antes de criar a conta — sem isso, todo primeiro
+        // acesso batia nessa leitura sem permissão e caía direto na tela de
+        // "link inválido", mesmo com o convite certinho. "list" (listar
+        // todos) continua restrito, só o dono/admin enumeram a coleção.
+        allow get: if true;
+        allow list: if isOwner(bId) || isAdmin();
+        allow create: if isOwner(bId) || isAdmin()
+                    || (request.auth != null && request.auth.uid == request.resource.data.authUid);
+        allow update, delete: if isOwner(bId) || isAdmin();
+      }
+    }
+
+    // Mapeamento uid -> {bId, equipeId} de um membro da equipe. Escrito uma
+    // vez no autocadastro (a própria pessoa, já autenticada com o uid novo),
+    // lido a cada login por ela mesma. Mesma observação do equipeAuth acima:
+    // não existia regra nenhuma pra essa coleção antes.
+    match /funcionarios/{uid} {
+      allow read, create: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Perfil (nome/WhatsApp) do cliente com login próprio, keyed pelo
+    // próprio uid — cada cliente só lê/escreve o seu. Igual aos casos acima,
+    // não existia NENHUMA regra pra essa coleção: todo cadastro/login de
+    // cliente com conta própria dava permission-denied ao salvar/buscar
+    // nome e WhatsApp.
+    match /clientesApp/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Ofertas com preço personalizado (link tipo vender.html?oferta=ID) —
+    // leitura pública porque é consultada ANTES de existir qualquer conta
+    // (na página de vendas, e na tela de cadastro do barbeiro). Só o admin
+    // cria/edita/ativa — outra coleção que não tinha regra nenhuma.
+    match /ofertas/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ── Status de acesso (trial / ativo / bloqueado / pendente) ──
+    match /acessos/{bId} {
+      // "get" (leitura de UM doc, id já conhecido) é público: barbeiro.html e
+      // cliente.html verificam bloqueio em tempo real sem estar logado como
+      // admin. "list" (listar a coleção inteira, com todos os dias restantes
+      // de todo mundo) fica restrito ao admin — antes estava público também,
+      // o que permitia qualquer pessoa enumerar a coleção pelo SDK e ver a
+      // situação de pagamento de todos os donos cadastrados.
+      allow get: if true;
+      allow list: if isAdmin();
+
+      // Autocadastro: o próprio barbeiro cria seu pedido de acesso ao se cadastrar,
+      // sempre como 'pendente' ou 'trial' — nunca já 'ativo'.
+      allow create: if isOwner(bId)
+                    && request.resource.data.status in ['pendente','trial'];
+
+      // Só o admin aprova, bloqueia, renova, expira ou exclui o acesso.
+      allow update, delete: if isAdmin();
+    }
+
+    // ── Agendamentos ──
+    match /agendamentos/{id} {
+      // Leitura pública: necessária p/ cliente.html conferir horários livres,
+      // painel-chamada.html (TV sem login) e o modo funcionário (sem login próprio).
+      allow read: if true;
+
+      // Criação: exige o formato correto de um agendamento válido — exceto
+      // pro próprio dono, que também pode restaurar um backup (registro com
+      // qualquer status, ex: "cancelado", recuperando um dado apagado).
+      allow create: if isOwner(request.resource.data.barbeiroId) || isAdmin()
+                    || (request.resource.data.keys().hasAll(
+                        ['barbeiroId','clienteNome','corte','preco','data','hora','status']
+                      )
+                    && request.resource.data.status in ['pendente','concluido']
+                    && request.resource.data.clienteNome is string
+                    && request.resource.data.clienteNome.size() < 100
+                    && request.resource.data.corte is string
+                    && request.resource.data.corte.size() < 100
+                    && request.resource.data.preco is number
+                    && request.resource.data.preco >= 0
+                    && request.resource.data.preco < 10000);
+
+      // Atualização: status (concluir/cancelar), forma de pagamento, aviso de
+      // lembrete 1h e ajuste de preço (desconto) — nada além disso, pra não
+      // deixar reescrever nome, telefone ou horário depois de criado. O dono
+      // pode editar o próprio livremente (ex: restaurar um backup).
+      // canceladoPor/canceladoEm: gravados quando o próprio cliente cancela
+      // (tela "Meus Agendamentos"), pra o dono saber que não foi ele quem
+      // cancelou e poder notificar pela Central de Avisos.
+      allow update: if isOwner(resource.data.barbeiroId) || isAdmin()
+                    || (request.resource.data.diff(resource.data).affectedKeys()
+                        .hasOnly(['status','formaPagamento','avisoEnviado','preco','precoOriginal','canceladoPor','canceladoEm'])
+                    && request.resource.data.status in ['pendente','concluido','cancelado']
+                    && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['formaPagamento'])
+                        || request.resource.data.formaPagamento in ['dinheiro','pix','debito','credito','pendente'])
+                    && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['preco'])
+                        || (request.resource.data.preco is number && request.resource.data.preco >= 0 && request.resource.data.preco < 10000)));
+
+      // O dono pode apagar os próprios agendamentos (ex: Zona de Perigo,
+      // limpando dados de teste) — só o admin apagando de outra barbearia
+      // além disso.
+      allow delete: if isOwner(resource.data.barbeiroId) || isAdmin();
+    }
+
+    // ── Fila de espera ──
+    match /fila/{id} {
+      allow read: if true;
+
+      allow create: if isOwner(request.resource.data.barbeiroId) || isAdmin()
+                    || (request.resource.data.keys().hasAll(['barbeiroId','clienteNome','status'])
+                    && request.resource.data.status == 'aguardando'
+                    && request.resource.data.clienteNome is string
+                    && request.resource.data.clienteNome.size() < 100);
+
+      // Atualização: status (+ atendidoEm quando concluído), forma de
+      // pagamento registrada antes de atender e ajuste de preço (desconto).
+      // O dono pode editar a própria fila livremente (ex: restaurar backup).
+      allow update: if isOwner(resource.data.barbeiroId) || isAdmin()
+                    || (request.resource.data.diff(resource.data).affectedKeys()
+                        .hasOnly(['status','atendidoEm','formaPagamento','preco','precoOriginal'])
+                    && request.resource.data.status in ['aguardando','atendido','removido']
+                    && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['formaPagamento'])
+                        || request.resource.data.formaPagamento in ['dinheiro','pix','debito','credito','pendente'])
+                    && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['preco'])
+                        || (request.resource.data.preco is number && request.resource.data.preco >= 0 && request.resource.data.preco < 10000)));
+
+      // Mesma lógica dos agendamentos: o dono pode apagar a própria fila.
+      allow delete: if isOwner(resource.data.barbeiroId) || isAdmin();
+    }
+
+  }
+}
