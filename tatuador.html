@@ -1288,6 +1288,45 @@
     </div>
   </div>
 
+  <!-- Modal de Anamnese, TCLE e Responsável Legal -->
+  <div id="modal-anamnese" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:56;align-items:center;justify-content:center;padding:1rem">
+    <div class="card" style="max-width:440px;width:100%;max-height:90vh;overflow-y:auto">
+      <div class="card-titulo">Anamnese — <span id="anam-cliente-nome"></span></div>
+
+      <div class="input-group" id="anam-condicoes">
+        <label>Condições de saúde relevantes</label>
+        <label style="display:flex;gap:.4rem;align-items:center;font-weight:400"><input type="checkbox" value="diabetes"> Diabetes</label>
+        <label style="display:flex;gap:.4rem;align-items:center;font-weight:400"><input type="checkbox" value="hemofilia_coagulacao"> Problema de coagulação</label>
+        <label style="display:flex;gap:.4rem;align-items:center;font-weight:400"><input type="checkbox" value="cardiaco"> Problema cardíaco</label>
+        <label style="display:flex;gap:.4rem;align-items:center;font-weight:400"><input type="checkbox" value="pele_sensivel_queloide"> Pele sensível / tendência a queloide</label>
+        <label style="display:flex;gap:.4rem;align-items:center;font-weight:400"><input type="checkbox" value="epilepsia"> Epilepsia</label>
+      </div>
+      <div class="input-group"><label>Alergias</label><input type="text" id="anam-alergias" placeholder="Ex: látex, níquel, alguma tinta"></div>
+      <div class="input-group"><label>Medicamentos em uso</label><input type="text" id="anam-medicamentos" placeholder="Ex: anticoagulante"></div>
+      <div class="input-group"><label style="display:flex;gap:.4rem;align-items:center"><input type="checkbox" id="anam-gestante"> Gestante ou amamentando</label></div>
+      <div class="input-group"><label>Observações</label><textarea id="anam-observacoes" rows="2" style="width:100%;background:var(--card-inp-bg);border:1.5px solid var(--card-inp-border);border-radius:10px;padding:.6rem .75rem;color:var(--text);font-size:.82rem;font-family:var(--font);resize:vertical"></textarea></div>
+
+      <div id="anam-bloco-responsavel" style="display:none;border-top:1px solid var(--card-border);margin-top:.8rem;padding-top:.8rem">
+        <div class="card-titulo" style="font-size:.95rem">⚠️ Cliente menor de idade — responsável legal</div>
+        <div class="input-group"><label>Nome do responsável</label><input type="text" id="anam-responsavel-nome"></div>
+        <div class="input-group"><label>CPF do responsável (opcional)</label><input type="text" id="anam-responsavel-cpf"></div>
+        <div class="input-group"><label>URL do documento do responsável (opcional)</label><input type="text" id="anam-responsavel-doc-url" placeholder="Link do RG/CPF já enviado"></div>
+      </div>
+
+      <button class="btn-primario" id="btn-salvar-anamnese">Salvar Anamnese</button>
+
+      <div style="border-top:1px solid var(--card-border);margin-top:1rem;padding-top:1rem">
+        <div class="card-titulo" style="font-size:.95rem">Termo de Consentimento (TCLE)</div>
+        <p id="anam-tcle-texto" class="detalhe" style="white-space:pre-wrap"></p>
+        <div class="detalhe" id="anam-tcle-status" style="margin-bottom:.5rem"></div>
+        <div class="input-group"><label>Nome de quem está aceitando agora</label><input type="text" id="anam-tcle-nome" placeholder="Nome completo (da cliente, ou do responsável se menor)"></div>
+        <button class="btn-primario" id="btn-aceitar-tcle">Registrar Aceite do TCLE</button>
+      </div>
+
+      <button class="btn-secundario" style="width:100%;margin-top:.8rem" id="btn-fechar-anamnese">Fechar</button>
+    </div>
+  </div>
+
   <!-- Modal de registro de pagamento avulso (fora do fluxo de sessão) -->
   <div id="modal-registrar-pagamento" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:55;align-items:center;justify-content:center;padding:1rem">
     <div class="card" style="max-width:380px;width:100%">
@@ -1395,10 +1434,11 @@ import { checarElegibilidade } from './js/agenda.js?v=20260731a';
 import { escutarServicos, criarServico, excluirServico, calcularCombo } from './js/servicos.js?v=20260728d';
 import { escutarClientes, criarCliente, ehAniversarioHoje, excluirCliente, editarCliente } from './js/clientes.js?v=20260728d';
 import { criarMembroEquipe, escutarEquipe, excluirMembroEquipe, editarMembroEquipe } from './js/equipe.js?v=20260729a';
-import { tempoMaxRecomendado, descricaoTipoPele } from './js/anamnese.js?v=20260728d';
+import { tempoMaxRecomendado, descricaoTipoPele, ehMenorDeIdade } from './js/anamnese.js?v=20260728d';
 import { registrarPagamento, escutarPendencias, quitarPendencia, resumoFinanceiro, escutarFinanceiroPeriodo } from './js/financeiro.js?v=20260729a';
 import { criarPacote, escutarPacotesDoNegocio, consumirSessaoDoPacote, excluirPacote, pacoteVencido, diasParado, DIAS_PARADO_ALERTA } from './js/pacotes-sessoes.js?v=20260728d';
 import { initAbaProjetos } from './js/ui-projetos.js?v=20260731a';
+import { initModalAnamnese } from './js/ui-anamnese.js?v=20260731a';
 import { criarProdutoCabine, escutarProdutosCabine, produtosEmAlerta, baixarEstoque, somarEstoque, buscarPorCodigoBarras, excluirProdutoCabine, registrarMovimentoProduto, escutarMovimentosProdutos } from './js/produtos-cabine.js?v=20260729a';
 import { criarInsumo, escutarInsumos, reporInsumo, darBaixaInsumo, excluirInsumo, insumosEmAlerta, buscarInsumoPorCodigoBarras, registrarMovimentoInsumo, escutarMovimentosInsumos } from './js/insumos.js?v=20260729a';
 import { criarCupom, escutarCupons, desativarCupom, calcularDescontoCupom, registrarUsoCupom } from './js/cupons.js?v=20260729a';
@@ -1480,6 +1520,8 @@ function escapeHtml(str) {
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[c]));
 }
+
+const modalAnamnese = initModalAnamnese({ toast });
 
 let usuarioAtual = null;
 let cabinesCache = [];
@@ -3245,7 +3287,7 @@ function renderClientes(clientes) {
     <div class="agendamento-item nome-clicavel" data-abrir-menu-cliente="${c.id}">
       <div class="agendamento-info" style="min-width:0;flex:1">
         <div class="nome">${escapeHtml(c.nome)} 💬</div>
-        <div class="detalhe">${escapeHtml(c.whatsapp) || 'sem WhatsApp'}${c.fichaPele ? ' · ' + (descricaoTipoPele(c.fichaPele.tipoFitzpatrick) || 'anamnese preenchida') : ' · sem anamnese'}</div>
+        <div class="detalhe">${escapeHtml(c.whatsapp) || 'sem WhatsApp'} · ${c.anamnese ? 'anamnese preenchida' : 'sem anamnese'}${ehMenorDeIdade(c.dataNascimento) ? (c.responsavelLegal ? ' · menor, com responsável' : ' · ⚠️ menor sem responsável') : ''}</div>
         ${c.observacoes ? `<div class="detalhe" style="margin-top:.25rem;color:var(--accent-light);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">📝 ${escapeHtml(c.observacoes)}</div>` : ''}
       </div>
     </div>
@@ -3268,10 +3310,15 @@ function abrirMenuCliente(clienteId) {
   $('wpp-observacoes').value = cliente.observacoes || '';
 
   $('wpp-acoes').innerHTML = `
+    <button class="btn-primario" id="btn-ir-anamnese" style="text-align:left">📋 Anamnese / TCLE</button>
     <button class="btn-primario" id="btn-ir-registrar-pagamento" style="text-align:left">💳 Registrar Pagamento</button>
     <button class="btn-primario" id="btn-ir-vender-produto" style="text-align:left">🛍️ Vender Produto</button>
     <button class="btn-secundario" id="btn-ir-excluir-cliente" style="text-align:left;color:#ff4b2b;border-color:#ff4b2b">🗑️ Excluir cliente da base</button>
   `;
+  $('btn-ir-anamnese').addEventListener('click', () => {
+    $('modal-whatsapp').style.display = 'none';
+    modalAnamnese.abrir(cliente);
+  });
   $('btn-ir-registrar-pagamento').addEventListener('click', () => abrirModalRegistrarPagamento(clienteId));
   $('btn-ir-vender-produto').addEventListener('click', () => abrirModalVenderProduto(clienteId));
   $('btn-ir-excluir-cliente').addEventListener('click', async () => {

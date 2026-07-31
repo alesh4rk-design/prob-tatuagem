@@ -1,4 +1,6 @@
-// Pro'Ink — Clientes (cadastro pela recepção + ficha de pele embutida)
+// Pro'Ink — Clientes (cadastro pela recepção). Anamnese, TCLE e responsável
+// legal (cliente menor de idade) ficam em anamnese.js, gravados no mesmo
+// documento de clientes/{id}.
 import { db } from "./firebase-config.js?v=20260728d";
 import {
   collection, doc, addDoc, updateDoc, deleteDoc,
