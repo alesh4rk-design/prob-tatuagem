@@ -186,6 +186,14 @@ service cloud.firestore {
         (request.method == "create" && ehDoMeuNegocio(request.resource.data.negocioId));
     }
 
+    match /projetos/{id} {
+      allow read: if ehDoMeuNegocio(resource.data.negocioId) ||
+        (logado() && resource.data.clienteId != null &&
+         get(/databases/$(database)/documents/clientes/$(resource.data.clienteId)).data.clienteUid == request.auth.uid);
+      allow write: if ehDoMeuNegocio(resource.data.negocioId) ||
+        (request.method == "create" && ehDoMeuNegocio(request.resource.data.negocioId));
+    }
+
     // Produtos e financeiro: qualquer um do negócio pode ler/escrever no
     // dia a dia (recepcionista registra pagamento e baixa estoque também)
     match /produtosCabine/{id} {
