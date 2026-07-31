@@ -254,6 +254,14 @@ service cloud.firestore {
         (request.method == "create" && ehDoMeuNegocio(request.resource.data.negocioId));
     }
 
+    // Portfólio: mesma regra de servicos — vitrine visível só à cliente
+    // cadastrada nesse negócio, escrita restrita a quem é do negócio.
+    match /portfolio/{id} {
+      allow read: if ehDoMeuNegocio(resource.data.negocioId) || meuNegocioComoCliente() == resource.data.negocioId;
+      allow write: if ehDoMeuNegocio(resource.data.negocioId) ||
+        (request.method == "create" && ehDoMeuNegocio(request.resource.data.negocioId));
+    }
+
     match /cupons/{id} {
       allow read, write: if ehDoMeuNegocio(resource.data.negocioId) ||
         (request.method == "create" && ehDoMeuNegocio(request.resource.data.negocioId));
