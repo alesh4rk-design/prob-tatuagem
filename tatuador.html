@@ -490,6 +490,7 @@
       <div class="nav-secao">
         <div class="nav-titulo">Projetos</div>
         <button class="aba-btn" data-aba="projetos" data-titulo="🖋️ Projetos"><span class="nav-icone">🖋️</span>Projetos</button>
+        <button class="aba-btn" data-aba="portfolio" data-titulo="🖼️ Portfólio"><span class="nav-icone">🖼️</span>Portfólio</button>
       </div>
       <div class="nav-secao">
         <div class="nav-titulo">Catálogo</div>
@@ -956,6 +957,37 @@
         <div class="input-group"><label>Sinal (R$, opcional)</label><input type="number" id="proj-sinal" step="0.01"></div>
         <button class="btn-primario" id="btn-criar-projeto">Criar Projeto</button>
         <button class="btn-secundario" style="width:100%;margin-top:.5rem" id="btn-cancelar-cadastro-projeto">Cancelar</button>
+      </div>
+    </div>
+
+    <!-- ABA PORTFÓLIO -->
+    <div class="aba-conteudo" id="aba-portfolio">
+      <details class="card tutorial-item">
+        <summary>🎓 Como usar esta aba</summary>
+        <div class="tutorial-texto">Monte a galeria de trabalhos de cada artista da equipe. A cliente vê essas fotos na vitrine dela — filtre por artista pra conferir só o portfólio de um.</div>
+      </details>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:.8rem">
+          <select id="portfolio-filtro-artista" style="max-width:220px"><option value="">Todos os artistas</option></select>
+          <button class="btn-primario" style="width:auto" id="btn-abrir-add-foto">+ Adicionar Foto</button>
+        </div>
+        <div id="portfolio-grade" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.6rem"><div class="empty-state">Carregando...</div></div>
+      </div>
+    </div>
+
+    <!-- Modal Adicionar Foto ao Portfólio -->
+    <div id="modal-add-foto-portfolio" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:55;align-items:center;justify-content:center;padding:1rem">
+      <div class="card" style="max-width:420px;width:100%;max-height:90vh;overflow-y:auto">
+        <div class="card-titulo">Nova Foto do Portfólio</div>
+        <div class="input-group">
+          <label>Artista</label>
+          <select id="port-artista"><option value="">Selecione o artista...</option></select>
+        </div>
+        <div class="input-group"><label>URL da foto</label><input type="text" id="port-url" placeholder="Link da imagem já hospedada"></div>
+        <div class="input-group"><label>Estilo (opcional)</label><input type="text" id="port-estilo" placeholder="Ex: blackwork, fineline, realismo"></div>
+        <div class="input-group"><label>Legenda (opcional)</label><input type="text" id="port-legenda"></div>
+        <button class="btn-primario" id="btn-salvar-foto-portfolio">Adicionar</button>
+        <button class="btn-secundario" style="width:100%;margin-top:.5rem" id="btn-cancelar-add-foto">Cancelar</button>
       </div>
     </div>
 
@@ -1439,6 +1471,7 @@ import { registrarPagamento, escutarPendencias, quitarPendencia, resumoFinanceir
 import { criarPacote, escutarPacotesDoNegocio, consumirSessaoDoPacote, excluirPacote, pacoteVencido, diasParado, DIAS_PARADO_ALERTA } from './js/pacotes-sessoes.js?v=20260728d';
 import { initAbaProjetos } from './js/ui-projetos.js?v=20260731a';
 import { initModalAnamnese } from './js/ui-anamnese.js?v=20260731a';
+import { initAbaPortfolio } from './js/ui-portfolio.js?v=20260731a';
 import { criarProdutoCabine, escutarProdutosCabine, produtosEmAlerta, baixarEstoque, somarEstoque, buscarPorCodigoBarras, excluirProdutoCabine, registrarMovimentoProduto, escutarMovimentosProdutos } from './js/produtos-cabine.js?v=20260729a';
 import { criarInsumo, escutarInsumos, reporInsumo, darBaixaInsumo, excluirInsumo, insumosEmAlerta, buscarInsumoPorCodigoBarras, registrarMovimentoInsumo, escutarMovimentosInsumos } from './js/insumos.js?v=20260729a';
 import { criarCupom, escutarCupons, desativarCupom, calcularDescontoCupom, registrarUsoCupom } from './js/cupons.js?v=20260729a';
@@ -1998,6 +2031,13 @@ function iniciarPainel() {
   initAbaProjetos({
     negocioId,
     getClientesCache: () => clientesCache,
+    getEquipeCache: () => equipeCache,
+    listenersAtivos,
+    toast
+  });
+
+  initAbaPortfolio({
+    negocioId,
     getEquipeCache: () => equipeCache,
     listenersAtivos,
     toast
