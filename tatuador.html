@@ -587,18 +587,6 @@
         <div id="novo-cliente-form-novo" style="display:none">
           <div class="input-group"><label>Nome da cliente nova</label><input type="text" id="novo-cliente-novo-nome"></div>
           <div class="input-group"><label>WhatsApp (opcional)</label><input type="text" id="novo-cliente-novo-wpp" placeholder="21999999999"></div>
-          <div class="input-group">
-            <label>Tipo de pele (Fitzpatrick, opcional)</label>
-            <select id="novo-cliente-novo-fitzpatrick">
-              <option value="">Não informado</option>
-              <option value="I">I — muito clara, sempre queima</option>
-              <option value="II">II — clara</option>
-              <option value="III">III — morena clara</option>
-              <option value="IV">IV — morena moderada</option>
-              <option value="V">V — morena escura</option>
-              <option value="VI">VI — negra</option>
-            </select>
-          </div>
         </div>
         <div class="input-group">
           <label>Cabine (opcional — deixe em branco pra colocar na fila)</label>
@@ -609,7 +597,7 @@
           <div id="novo-combo-servicos"><div class="empty-state">Carregando...</div></div>
         </div>
         <div class="input-group">
-          <label>Tempo de cabine <span id="novo-tempo-sugestao" style="color:var(--muted);font-weight:400"></span></label>
+          <label>Tempo de cabine</label>
           <select id="novo-tempo">
             <option value="10">10 min</option>
             <option value="15" selected>15 min</option>
@@ -706,20 +694,7 @@
         <div id="cli-form-wrap" style="display:none">
           <div class="input-group"><label>Nome</label><input type="text" id="cli-nome"></div>
           <div class="input-group"><label>WhatsApp</label><input type="text" id="cli-wpp" placeholder="21999999999"></div>
-          <div class="input-group"><label>Data de nascimento</label><input type="date" id="cli-nascimento"></div>
-          <div class="input-group">
-            <label>Tipo de pele (Fitzpatrick)</label>
-            <select id="cli-fitzpatrick">
-              <option value="">Não informado</option>
-              <option value="I">I — muito clara, sempre queima</option>
-              <option value="II">II — clara</option>
-              <option value="III">III — morena clara</option>
-              <option value="IV">IV — morena moderada</option>
-              <option value="V">V — morena escura</option>
-              <option value="VI">VI — negra</option>
-            </select>
-          </div>
-          <div class="input-group"><label>Observações de pele</label><input type="text" id="cli-obs-pele"></div>
+          <div class="input-group"><label>Observações</label><input type="text" id="cli-obs-pele" placeholder="Ex: alergia conhecida, preferência de horário"></div>
           <button class="btn-primario" id="btn-criar-cliente">Cadastrar Cliente</button>
           <button class="btn-secundario" id="btn-cancelar-form-cliente">Cancelar</button>
         </div>
@@ -1466,7 +1441,7 @@ import { checarElegibilidade } from './js/agenda.js?v=20260731a';
 import { escutarServicos, criarServico, excluirServico, calcularCombo } from './js/servicos.js?v=20260728d';
 import { escutarClientes, criarCliente, ehAniversarioHoje, excluirCliente, editarCliente } from './js/clientes.js?v=20260728d';
 import { criarMembroEquipe, escutarEquipe, excluirMembroEquipe, editarMembroEquipe } from './js/equipe.js?v=20260729a';
-import { tempoMaxRecomendado, descricaoTipoPele, ehMenorDeIdade } from './js/anamnese.js?v=20260728d';
+import { ehMenorDeIdade } from './js/anamnese.js?v=20260728d';
 import { registrarPagamento, escutarPendencias, quitarPendencia, resumoFinanceiro, escutarFinanceiroPeriodo } from './js/financeiro.js?v=20260729a';
 import { criarPacote, escutarPacotesDoNegocio, consumirSessaoDoPacote, excluirPacote, pacoteVencido, diasParado, DIAS_PARADO_ALERTA } from './js/pacotes-sessoes.js?v=20260728d';
 import { initAbaProjetos } from './js/ui-projetos.js?v=20260731a';
@@ -4040,11 +4015,10 @@ $('btn-criar-cliente').addEventListener('click', async () => {
     await criarCliente(usuarioAtual.negocioId, {
       nome,
       whatsapp: $('cli-wpp').value.trim(),
-      tipoFitzpatrick: $('cli-fitzpatrick').value || null,
-      observacoesPele: $('cli-obs-pele').value.trim(),
+      observacoes: $('cli-obs-pele').value.trim(),
       dataNascimento: $('cli-nascimento').value || null
     });
-    $('cli-nome').value = ''; $('cli-wpp').value = ''; $('cli-fitzpatrick').value = ''; $('cli-obs-pele').value = ''; $('cli-nascimento').value = '';
+    $('cli-nome').value = ''; $('cli-wpp').value = ''; $('cli-obs-pele').value = ''; $('cli-nascimento').value = '';
     $('cli-form-wrap').style.display = 'none';
     $('cli-form-intro').style.display = 'block';
     toast('Cliente cadastrada.', 'sucesso');
@@ -4087,13 +4061,8 @@ $('btn-cancelar-form-servico').addEventListener('click', () => {
   $('serv-form-intro').style.display = 'block';
 });
 
-// Sugere tempo de cabine com base na ficha de pele da cliente selecionada
 $('novo-cliente').addEventListener('change', () => {
   $('novo-cliente-form-novo').style.display = $('novo-cliente').value === '__novo__' ? 'block' : 'none';
-  const cliente = clientesCache.find((c) => c.id === $('novo-cliente').value);
-  const tipo = cliente?.fichaPele?.tipoFitzpatrick;
-  const sugestao = tipo ? tempoMaxRecomendado(tipo) : null;
-  $('novo-tempo-sugestao').textContent = sugestao ? `(sugerido: até ${sugestao}min p/ este tipo de pele)` : '';
 });
 
 function abrirModalNovoAgendamento() {
@@ -4102,9 +4071,7 @@ function abrirModalNovoAgendamento() {
   $('novo-cliente-form-novo').style.display = 'none';
   $('novo-cliente-novo-nome').value = '';
   $('novo-cliente-novo-wpp').value = '';
-  $('novo-cliente-novo-fitzpatrick').value = '';
   $('novo-cabine').value = '';
-  $('novo-tempo-sugestao').textContent = '';
   const agora = new Date();
   agora.setMinutes(agora.getMinutes() - agora.getTimezoneOffset());
   $('novo-datahora').value = agora.toISOString().slice(0, 16);
@@ -4190,12 +4157,11 @@ function renderAgendaDia(listaOriginal) {
     const cabineAtual = cabinesCache.find((c) => c.id === ag.cabineId);
     const atrasado = ag.status === 'agendado' && ag.dataHora?.toDate && (new Date() - ag.dataHora.toDate()) > 10 * 60000;
     const sugerirRealocacao = atrasado && !semCabine && cabineAtual?.status !== 'livre' && cabinesLivres.length > 0;
-    const tipoPeleTexto = descricaoTipoPele(cliente?.fichaPele?.tipoFitzpatrick);
     return `
       <div class="agendamento-item nome-clicavel" data-abrir-menu-cliente="${ag.clienteId}">
         <div class="agendamento-info">
           <div class="nome">${hora} · ${escapeHtml(ag.clienteNome)}</div>
-          <div class="detalhe">${servicos} · ${ag.tempoMin}min · ${ag.origem}${semCabine && ag.status === 'agendado' ? ' · sem cabine definida' : ''}${tipoPeleTexto ? ' · ' + tipoPeleTexto : ''}</div>
+          <div class="detalhe">${servicos} · ${ag.tempoMin}min · ${ag.origem}${semCabine && ag.status === 'agendado' ? ' · sem cabine definida' : ''}</div>
           ${sugerirRealocacao ? `<div class="aviso-bloqueio">⏰ Atrasado — cabine ${cabineAtual?.nome || ''} ocupada. <button class="btn-secundario" data-mover-agendamento="${ag.id}" data-mover-destino="${cabinesLivres[0].id}" style="margin-left:.4rem">Mover pra ${cabinesLivres[0].nome} (livre)</button></div>` : ''}
         </div>
         <div class="agendamento-acoes">
@@ -4443,15 +4409,15 @@ function atualizarCentralAvisos() {
     }
   });
 
-  const clientesSemFichaComAgendamento = new Set();
+  const clientesSemAnamneseComAgendamento = new Set();
   (agendaDiaCache || []).forEach((ag) => {
     if (ag.status === 'cancelado' || ag.status === 'faltou') return;
     const cliente = clientesCache.find((c) => c.id === ag.clienteId);
-    if (cliente && !cliente.fichaPele) clientesSemFichaComAgendamento.add(cliente.id);
+    if (cliente && !cliente.anamnese) clientesSemAnamneseComAgendamento.add(cliente.id);
   });
-  clientesSemFichaComAgendamento.forEach((clienteId) => {
+  clientesSemAnamneseComAgendamento.forEach((clienteId) => {
     const cliente = clientesCache.find((c) => c.id === clienteId);
-    avisos.push({ id: `ficha-pele-${clienteId}`, texto: `📋 ${cliente.nome} tem agendamento hoje sem anamnese preenchida.`, aba: 'clientes' });
+    avisos.push({ id: `anamnese-${clienteId}`, texto: `📋 ${cliente.nome} tem agendamento hoje sem anamnese preenchida.`, aba: 'clientes' });
   });
 
   const visiveis = avisos.filter((a) => !avisosDispensados.has(a.id));
@@ -4550,14 +4516,8 @@ $('modal-detalhe-cabine').querySelectorAll('[data-estender]').forEach((btn) => {
     if (!sessao) return;
     const minutos = Number(btn.dataset.estender);
     const novoTotal = sessao.tempoMin + minutos;
-    const cliente = clientesCache.find((c) => c.id === sessao.clienteId);
-    const tipoPele = cliente?.fichaPele?.tipoFitzpatrick;
-    const maxRecomendado = tipoPele ? tempoMaxRecomendado(tipoPele) : null;
 
-    const excedeuRecomendado = maxRecomendado != null && novoTotal > maxRecomendado;
-    const mensagem = excedeuRecomendado
-      ? `⚠️ Com +${minutos}min, a sessão vai pra ${novoTotal}min — acima do recomendado (${maxRecomendado}min) pro tipo de pele ${tipoPele} dessa cliente. Exposição UV além do recomendado aumenta o risco de queimadura e danos à pele. Confirma mesmo assim?`
-      : `⚠️ Adicionar ${minutos}min a mais de exposição UV. Tempo total passa a ser ${novoTotal}min. Tempo excessivo na cabine aumenta o risco de queimadura e danos à pele — confirma?`;
+    const mensagem = `Adicionar ${minutos}min à sessão. Tempo total passa a ser ${novoTotal}min. Confirma?`;
 
     if (!(await confirmar(mensagem))) return;
 
@@ -4895,8 +4855,7 @@ $('btn-criar-agendamento').addEventListener('click', async () => {
       }
       const ref = await criarCliente(usuarioAtual.negocioId, {
         nome: nomeNovaCliente,
-        whatsapp: $('novo-cliente-novo-wpp').value.trim(),
-        tipoFitzpatrick: $('novo-cliente-novo-fitzpatrick').value || null
+        whatsapp: $('novo-cliente-novo-wpp').value.trim()
       });
       clienteId = ref.id;
       clienteNome = nomeNovaCliente;

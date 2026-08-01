@@ -9,7 +9,7 @@ import {
 
 // Usado na página pública cadastro-cliente.html (link compartilhado pelo negócio)
 export async function cadastrarClienteComLogin(negocioId, {
-  nome, whatsapp = "", email, senha, tipoFitzpatrick = null
+  nome, whatsapp = "", email, senha, dataNascimento = null
 }) {
   const cred = await createUserWithEmailAndPassword(auth, email, senha);
 
@@ -22,7 +22,7 @@ export async function cadastrarClienteComLogin(negocioId, {
     clienteUid: cred.user.uid,
     nome,
     whatsapp,
-    fichaPele: tipoFitzpatrick ? { tipoFitzpatrick, observacoes: "", atualizadoEm: serverTimestamp() } : null,
+    dataNascimento: dataNascimento || null,
     ultimaSessaoEm: null,
     criadoEm: serverTimestamp()
   });

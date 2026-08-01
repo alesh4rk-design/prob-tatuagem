@@ -116,19 +116,6 @@ export async function obterUltimoAceiteTcle(clienteId) {
   return snap.exists() ? (snap.data().tcle?.ultimoAceite || null) : null;
 }
 
-// TODO(v1-parte-2): tatuador.html ainda importa tempoMaxRecomendado/descricaoTipoPele
-// e referencia cliente.fichaPele.tipoFitzpatrick em telas de agendamento/cabine —
-// isso é resquício do conceito de bronzeamento (tempo de exposição por tipo de pele)
-// e não tem equivalente direto em tatuagem. Ficam aqui como stubs neutros só pra não
-// quebrar o carregamento da página; a wiring completa (flash vs custom, projeto por
-// etapas) precisa substituir esses pontos de uso, não só a assinatura da função.
-export function tempoMaxRecomendado() {
-  return null;
-}
-export function descricaoTipoPele() {
-  return null;
-}
-
 // Verifica se a cliente pode ser agendada: precisa de anamnese preenchida e,
 // se for menor de idade, também precisa de responsável legal cadastrado.
 export function podeAgendar(cliente) {

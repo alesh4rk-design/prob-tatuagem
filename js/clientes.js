@@ -8,17 +8,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 import { notificarErroFirestore } from "./firestore-erro.js?v=20260728d";
 
-export async function criarCliente(negocioId, { nome, whatsapp = "", tipoFitzpatrick = null, observacoesPele = "", dataNascimento = null }) {
+export async function criarCliente(negocioId, { nome, whatsapp = "", observacoes = "", dataNascimento = null }) {
   return addDoc(collection(db, "clientes"), {
     negocioId,
     nome,
     whatsapp,
+    observacoes,
     dataNascimento: dataNascimento || null,
-    fichaPele: tipoFitzpatrick ? {
-      tipoFitzpatrick,
-      observacoes: observacoesPele,
-      atualizadoEm: serverTimestamp()
-    } : null,
     ultimaSessaoEm: null,
     criadoEm: serverTimestamp()
   });

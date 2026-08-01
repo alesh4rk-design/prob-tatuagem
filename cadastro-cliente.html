@@ -110,18 +110,7 @@
 
   <div class="input-group"><label>Nome</label><input type="text" id="c-nome"></div>
   <div class="input-group"><label>WhatsApp</label><input type="text" id="c-wpp" placeholder="21999999999"></div>
-  <div class="input-group">
-    <label>Tipo de pele (Fitzpatrick) — opcional</label>
-    <select id="c-fitzpatrick">
-      <option value="">Prefiro informar na loja</option>
-      <option value="I">I — muito clara, sempre queima</option>
-      <option value="II">II — clara</option>
-      <option value="III">III — morena clara</option>
-      <option value="IV">IV — morena moderada</option>
-      <option value="V">V — morena escura</option>
-      <option value="VI">VI — negra</option>
-    </select>
-  </div>
+  <div class="input-group"><label>Data de nascimento</label><input type="date" id="c-nascimento"></div>
   <div class="input-group"><label>E-mail</label><input type="email" id="c-email"></div>
   <div class="input-group"><label>Senha</label><input type="password" id="c-senha"></div>
 
@@ -148,7 +137,7 @@ if (!negocioId) {
   $('btn-criar-conta').addEventListener('click', async () => {
     const nome = $('c-nome').value.trim();
     const whatsapp = $('c-wpp').value.trim();
-    const tipoFitzpatrick = $('c-fitzpatrick').value || null;
+    const dataNascimento = $('c-nascimento').value || null;
     const email = $('c-email').value.trim();
     const senha = $('c-senha').value;
     $('erro').textContent = '';
@@ -164,7 +153,7 @@ if (!negocioId) {
 
     $('btn-criar-conta').disabled = true;
     try {
-      await cadastrarClienteComLogin(negocioId, { nome, whatsapp, email, senha, tipoFitzpatrick });
+      await cadastrarClienteComLogin(negocioId, { nome, whatsapp, email, senha, dataNascimento });
       window.location.href = 'cliente.html';
     } catch (err) {
       $('btn-criar-conta').disabled = false;

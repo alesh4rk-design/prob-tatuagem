@@ -1,12 +1,12 @@
 // Pro'Ink — Agenda (online + presencial), combo de serviços,
-// integrando ficha de pele e regras de segurança
+// integrando anamnese e regras de segurança
 import { db } from "./firebase-config.js?v=20260728d";
 import {
   collection, doc, addDoc, updateDoc, getDoc, getDocs, increment,
   onSnapshot, query, where, orderBy, serverTimestamp, Timestamp
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 import {
-  verificarIntervaloMinimo, verificarLimiteMensal, tempoMaxRecomendado,
+  verificarIntervaloMinimo, verificarLimiteMensal,
   podeAgendar as podeAgendarPelaAnamnese
 } from "./anamnese.js?v=20260728d";
 import { notificarErroFirestore } from "./firestore-erro.js?v=20260728d";
@@ -14,9 +14,10 @@ import { notificarErroFirestore } from "./firestore-erro.js?v=20260728d";
 // status: "agendado" | "em_andamento" | "concluido" | "cancelado" | "faltou"
 // origem: "online" | "presencial"
 
-// Checa se o cliente pode agendar (intervalo mínimo + limite mensal).
-// opcoes.intervaloHoras e opcoes.limiteMes vêm da Configuração do negócio;
-// se não informados, usam os padrões de ficha-pele.js.
+// Checa se o cliente pode agendar (intervalo mínimo desde a última sessão,
+// limite mensal de sessões, anamnese preenchida e responsável legal se for
+// menor de idade). opcoes.intervaloHoras e opcoes.limiteMes vêm da
+// Configuração do negócio; se não informados, usam os padrões de anamnese.js.
 export async function checarElegibilidade(negocioId, clienteId, opcoes = {}) {
   const clienteSnap = await getDoc(doc(db, "clientes", clienteId));
   if (!clienteSnap.exists()) return { podeAgendar: true, avisos: [] };
@@ -49,9 +50,6 @@ export async function checarElegibilidade(negocioId, clienteId, opcoes = {}) {
     avisos.push(`Atenção: restam apenas ${limite.restantes} sessões neste mês.`);
   }
 
-  const tipoPele = cliente.fichaPele?.tipoFitzpatrick;
-  const tempoSugerido = tipoPele ? tempoMaxRecomendado(tipoPele) : null;
-
   const anamneseCheck = podeAgendarPelaAnamnese(cliente);
   if (!anamneseCheck.permitido) {
     avisos.push(anamneseCheck.motivo);
@@ -59,8 +57,7 @@ export async function checarElegibilidade(negocioId, clienteId, opcoes = {}) {
 
   return {
     podeAgendar: intervalo.permitido && limite.dentroDoLimite && anamneseCheck.permitido,
-    avisos,
-    tempoSugerido
+    avisos
   };
 }
 
