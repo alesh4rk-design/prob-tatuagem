@@ -6,7 +6,8 @@ import {
   onSnapshot, query, where, orderBy, serverTimestamp, Timestamp
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 import {
-  verificarIntervaloMinimo, verificarLimiteMensal, tempoMaxRecomendado
+  verificarIntervaloMinimo, verificarLimiteMensal, tempoMaxRecomendado,
+  podeAgendar as podeAgendarPelaAnamnese
 } from "./anamnese.js?v=20260728d";
 import { notificarErroFirestore } from "./firestore-erro.js?v=20260728d";
 
@@ -51,8 +52,13 @@ export async function checarElegibilidade(negocioId, clienteId, opcoes = {}) {
   const tipoPele = cliente.fichaPele?.tipoFitzpatrick;
   const tempoSugerido = tipoPele ? tempoMaxRecomendado(tipoPele) : null;
 
+  const anamneseCheck = podeAgendarPelaAnamnese(cliente);
+  if (!anamneseCheck.permitido) {
+    avisos.push(anamneseCheck.motivo);
+  }
+
   return {
-    podeAgendar: intervalo.permitido && limite.dentroDoLimite,
+    podeAgendar: intervalo.permitido && limite.dentroDoLimite && anamneseCheck.permitido,
     avisos,
     tempoSugerido
   };

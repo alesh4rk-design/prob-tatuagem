@@ -66,6 +66,17 @@ export function initModalAnamnese({ toast }) {
 
     $("btn-salvar-anamnese").addEventListener("click", async () => {
       if (!clienteAtual) return;
+
+      // Valida o responsável legal ANTES de gravar qualquer coisa — salvar a
+      // anamnese e só depois barrar por falta do responsável deixava a
+      // cliente com a anamnese já gravada mesmo quando o toast dizia erro.
+      const menor = ehMenorDeIdade(clienteAtual.dataNascimento);
+      const nomeResponsavel = $("anam-responsavel-nome").value.trim();
+      if (menor && !nomeResponsavel) {
+        toast("Cliente menor de idade precisa do nome do responsável legal.", "erro");
+        return;
+      }
+
       const condicoesSaude = Array.from(document.querySelectorAll("#anam-condicoes input[type=checkbox]:checked")).map((c) => c.value);
       const btn = $("btn-salvar-anamnese");
       btn.disabled = true;
@@ -78,9 +89,7 @@ export function initModalAnamnese({ toast }) {
           observacoes: $("anam-observacoes").value.trim()
         });
 
-        if (ehMenorDeIdade(clienteAtual.dataNascimento)) {
-          const nomeResponsavel = $("anam-responsavel-nome").value.trim();
-          if (!nomeResponsavel) { toast("Cliente menor de idade precisa do nome do responsável legal.", "erro"); return; }
+        if (menor) {
           await salvarResponsavelLegal(clienteAtual.id, {
             nomeResponsavel,
             cpfResponsavel: $("anam-responsavel-cpf").value.trim(),
