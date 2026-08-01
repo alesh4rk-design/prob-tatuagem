@@ -4905,6 +4905,21 @@ $('btn-criar-agendamento').addEventListener('click', async () => {
     const elegibilidade = await checarElegibilidade(usuarioAtual.negocioId, clienteId, { intervaloHoras: configNegocioCache.intervaloMinimoHoras, limiteMes: configNegocioCache.limiteSessoesMes });
     if (!elegibilidade.podeAgendar) {
       avisosWrap.innerHTML = elegibilidade.avisos.map((a) => `<div class="aviso-bloqueio">${a}</div>`).join('');
+      // Cliente sem anamnese (comum quando acabou de ser cadastrada aqui
+      // mesmo, no atalho "+ Cadastrar cliente nova agora") — sem esse botão,
+      // o único jeito de preencher era fechar o modal e ir achar a cliente
+      // de novo na aba Clientes.
+      if (elegibilidade.avisos.some((a) => a.includes('namnese') || a.includes('responsável'))) {
+        const btnAnamnese = document.createElement('button');
+        btnAnamnese.className = 'btn-primario';
+        btnAnamnese.style.marginTop = '.5rem';
+        btnAnamnese.textContent = '📋 Preencher anamnese agora';
+        btnAnamnese.addEventListener('click', async () => {
+          const clienteRecemCriada = clientesCache.find((c) => c.id === clienteId) || { id: clienteId, nome: clienteNome };
+          await modalAnamnese.abrir(clienteRecemCriada);
+        });
+        avisosWrap.appendChild(btnAnamnese);
+      }
       return;
     }
     if (elegibilidade.avisos.length > 0) {
