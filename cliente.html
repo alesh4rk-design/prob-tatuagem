@@ -184,6 +184,46 @@
       <div id="contato-estabelecimento" style="margin-top:.4rem"></div>
     </header>
 
+    <div class="card" id="card-anamnese">
+      <div class="card-titulo">Minha Anamnese</div>
+      <div id="anamnese-status" class="empty-state">Carregando...</div>
+      <div id="anamnese-form" style="display:none">
+        <div class="input-group" id="anam-condicoes" style="text-align:left">
+          <label>Condições de saúde relevantes</label>
+          <label style="display:flex;gap:.4rem;align-items:center;font-weight:400"><input type="checkbox" value="diabetes"> Diabetes</label>
+          <label style="display:flex;gap:.4rem;align-items:center;font-weight:400"><input type="checkbox" value="hemofilia_coagulacao"> Problema de coagulação</label>
+          <label style="display:flex;gap:.4rem;align-items:center;font-weight:400"><input type="checkbox" value="cardiaco"> Problema cardíaco</label>
+          <label style="display:flex;gap:.4rem;align-items:center;font-weight:400"><input type="checkbox" value="pele_sensivel_queloide"> Pele sensível / tendência a queloide</label>
+          <label style="display:flex;gap:.4rem;align-items:center;font-weight:400"><input type="checkbox" value="epilepsia"> Epilepsia</label>
+        </div>
+        <div class="input-group"><label>Alergias</label><input type="text" id="anam-alergias" placeholder="Ex: látex, níquel, alguma tinta"></div>
+        <div class="input-group"><label>Medicamentos em uso</label><input type="text" id="anam-medicamentos"></div>
+        <div class="input-group"><label style="display:flex;gap:.4rem;align-items:center"><input type="checkbox" id="anam-gestante"> Gestante ou amamentando</label></div>
+
+        <div id="anam-bloco-responsavel" style="display:none">
+          <div class="card-titulo" style="font-size:.9rem">⚠️ Você é menor de idade — responsável legal</div>
+          <div class="input-group"><label>Nome do responsável</label><input type="text" id="anam-responsavel-nome"></div>
+          <div class="input-group"><label>CPF do responsável (opcional)</label><input type="text" id="anam-responsavel-cpf"></div>
+        </div>
+
+        <button class="btn-primario" id="btn-salvar-anamnese-cliente">Salvar Anamnese</button>
+
+        <div style="border-top:1px solid var(--card-border);margin-top:1rem;padding-top:1rem;text-align:left">
+          <div class="card-titulo" style="font-size:.9rem">Termo de Consentimento (TCLE)</div>
+          <p id="anam-tcle-texto" class="detalhe"></p>
+          <div class="detalhe" id="anam-tcle-status" style="margin-bottom:.5rem"></div>
+          <div class="input-group"><label>Nome de quem está aceitando (seu nome, ou do responsável se você for menor)</label><input type="text" id="anam-tcle-nome"></div>
+          <button class="btn-primario" id="btn-aceitar-tcle-cliente">Registrar Aceite do TCLE</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="card-portfolio" style="display:none">
+      <div class="card-titulo">Portfólio</div>
+      <div id="portfolio-filtro-artista-cliente" style="margin-bottom:.6rem"></div>
+      <div id="portfolio-grade-cliente" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:.5rem"><div class="empty-state">Carregando...</div></div>
+    </div>
+
     <div class="card">
       <div class="card-titulo">Agendar Nova Sessão</div>
       <div id="agendar-avisos"></div>
@@ -234,6 +274,11 @@ import { escutarCabines } from './js/cabines.js?v=20260728d';
 import { escutarConfigNegocio } from './js/config-negocio.js?v=20260729a';
 import { escutarHorarios, validarHorarioFuncionamento } from './js/horarios.js?v=20260728d';
 import { toast } from './js/ui-feedback.js?v=20260728d';
+import {
+  ehMenorDeIdade, salvarAnamnese, salvarResponsavelLegal,
+  registrarAceiteTcle, obterUltimoAceiteTcle, TEXTO_TCLE_PADRAO
+} from './js/anamnese.js?v=20260731a';
+import { escutarPortfolioDoNegocio } from './js/portfolio.js?v=20260731a';
 
 window.addEventListener('unhandledrejection', (e) => {
   console.error(e.reason);
@@ -344,6 +389,7 @@ $('btn-sair-cliente').addEventListener('click', async () => {
       clienteAtual = cliente;
       $('tela-login').style.display = 'none';
       $('painel-cliente').style.display = 'block';
+      renderAnamneseCliente(cliente);
       if (assinado) return;
       assinado = true;
       // Autocorreção pra contas criadas antes desse mapeamento existir —
@@ -372,6 +418,7 @@ $('btn-sair-cliente').addEventListener('click', async () => {
         horariosCache = horarios;
         if (dataEscolhida) montarGradeHorarios();
       });
+      initPortfolioCliente(cliente.negocioId);
       montarSeletorDatas();
     });
   });
@@ -437,6 +484,117 @@ function renderContatoEstabelecimento(config) {
       navigator.clipboard.writeText($('contato-pix-key').textContent).then(() => toast('PIX copiado!', 'sucesso'));
     });
   }
+}
+
+// ── Anamnese, TCLE e Responsável Legal (autoatendimento) ──
+function renderAnamneseCliente(cliente) {
+  const menor = ehMenorDeIdade(cliente.dataNascimento);
+  $('anam-bloco-responsavel').style.display = menor ? 'block' : 'none';
+
+  if (!cliente.anamnese) {
+    $('anamnese-status').textContent = 'Preencha sua anamnese antes da primeira sessão.';
+    $('anamnese-status').style.display = 'block';
+  } else {
+    $('anamnese-status').style.display = 'none';
+  }
+  $('anamnese-form').style.display = 'block';
+
+  // Só preenche os campos com o que já está salvo na primeira vez que
+  // aparece — sem essa guarda, o onSnapshot (que dispara de novo a cada
+  // 'Salvar') reescreveria por cima do que a cliente estivesse digitando.
+  if (!$('anamnese-form').dataset.preenchido) {
+    $('anamnese-form').dataset.preenchido = '1';
+    $('anam-alergias').value = cliente.anamnese?.alergias || '';
+    $('anam-medicamentos').value = cliente.anamnese?.medicamentos || '';
+    $('anam-gestante').checked = !!cliente.anamnese?.gestante;
+    document.querySelectorAll('#anam-condicoes input[type=checkbox]').forEach((chk) => {
+      chk.checked = (cliente.anamnese?.condicoesSaude || []).includes(chk.value);
+    });
+    if (menor) {
+      $('anam-responsavel-nome').value = cliente.responsavelLegal?.nomeResponsavel || '';
+      $('anam-responsavel-cpf').value = cliente.responsavelLegal?.cpfResponsavel || '';
+    }
+  }
+
+  $('anam-tcle-texto').textContent = TEXTO_TCLE_PADRAO;
+  $('anam-tcle-status').textContent = cliente.tcle?.ultimoAceite
+    ? `Último aceite: ${cliente.tcle.ultimoAceite.nomeDigitado}`
+    : 'Ainda sem aceite registrado.';
+}
+
+$('btn-salvar-anamnese-cliente').addEventListener('click', async () => {
+  if (!clienteAtual) return;
+  const menor = ehMenorDeIdade(clienteAtual.dataNascimento);
+  const nomeResponsavel = $('anam-responsavel-nome').value.trim();
+  if (menor && !nomeResponsavel) {
+    toast('Sendo menor de idade, é preciso informar o nome do responsável legal.', 'erro');
+    return;
+  }
+
+  const condicoesSaude = Array.from(document.querySelectorAll('#anam-condicoes input[type=checkbox]:checked')).map((c) => c.value);
+  const btn = $('btn-salvar-anamnese-cliente');
+  btn.disabled = true;
+  try {
+    await salvarAnamnese(clienteAtual.id, {
+      condicoesSaude,
+      alergias: $('anam-alergias').value.trim(),
+      medicamentos: $('anam-medicamentos').value.trim(),
+      gestante: $('anam-gestante').checked
+    });
+    if (menor) {
+      await salvarResponsavelLegal(clienteAtual.id, {
+        nomeResponsavel,
+        cpfResponsavel: $('anam-responsavel-cpf').value.trim()
+      });
+    }
+    toast('Anamnese salva.', 'sucesso');
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+$('btn-aceitar-tcle-cliente').addEventListener('click', async () => {
+  if (!clienteAtual) return;
+  const nomeDigitado = $('anam-tcle-nome').value.trim();
+  if (!nomeDigitado) { toast('Digite seu nome (ou o do responsável, se for menor).', 'erro'); return; }
+  await registrarAceiteTcle(clienteAtual.id, { nomeDigitado, textoVersao: TEXTO_TCLE_PADRAO });
+  toast('TCLE aceito.', 'sucesso');
+  $('anam-tcle-nome').value = '';
+});
+
+// ── Portfólio (leitura, filtro por artista) ──
+let portfolioCache = [];
+let portfolioIniciado = false;
+
+function renderPortfolioCliente(fotos, filtroArtistaId) {
+  const card = $('card-portfolio');
+  const grade = $('portfolio-grade-cliente');
+  if (!fotos.length) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+
+  const artistas = [...new Map(fotos.map((f) => [f.artistaId, f.artistaNome])).entries()];
+  $('portfolio-filtro-artista-cliente').innerHTML = artistas.length > 1
+    ? `<select id="portfolio-filtro-cliente"><option value="">Todos os artistas</option>${artistas.map(([id, nome]) => `<option value="${id}">${escapeHtml(nome || '')}</option>`).join('')}</select>`
+    : '';
+  const selectFiltro = $('portfolio-filtro-cliente');
+  if (selectFiltro) {
+    selectFiltro.value = filtroArtistaId || '';
+    selectFiltro.addEventListener('change', () => renderPortfolioCliente(portfolioCache, selectFiltro.value));
+  }
+
+  const visiveis = filtroArtistaId ? fotos.filter((f) => f.artistaId === filtroArtistaId) : fotos;
+  grade.innerHTML = visiveis.map((f) => `
+    <img src="${escapeHtml(f.url)}" alt="${escapeHtml(f.legenda || '')}" style="width:100%;border-radius:8px;aspect-ratio:1;object-fit:cover">
+  `).join('');
+}
+
+function initPortfolioCliente(negocioId) {
+  if (portfolioIniciado) return;
+  portfolioIniciado = true;
+  escutarPortfolioDoNegocio(negocioId, (fotos) => {
+    portfolioCache = fotos;
+    renderPortfolioCliente(fotos, $('portfolio-filtro-cliente')?.value || '');
+  });
 }
 
 function escutarMeusPacotes(clienteId) {
@@ -639,6 +797,9 @@ $('btn-agendar-online').addEventListener('click', async () => {
     const elegibilidade = await checarElegibilidade(clienteAtual.negocioId, clienteAtual.id, { intervaloHoras: configNegocioCache.intervaloMinimoHoras, limiteMes: configNegocioCache.limiteSessoesMes });
     if (!elegibilidade.podeAgendar) {
       avisosWrap.innerHTML = elegibilidade.avisos.map((a) => `<div class="empty-state" style="color:var(--red)">${a}</div>`).join('');
+      if (elegibilidade.avisos.some((a) => a.includes('namnese') || a.includes('responsável'))) {
+        $('card-anamnese').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
       return;
     }
 

@@ -139,7 +139,15 @@ service cloud.firestore {
          (!request.resource.data.keys().hasAny(['whatsapp']) || (request.resource.data.whatsapp is string && request.resource.data.whatsapp.size() < 20))) ||
         ehDoMeuNegocio(request.resource.data.negocioId)
       );
-      allow update, delete: if ehDoMeuNegocio(resource.data.negocioId);
+      allow update: if ehDoMeuNegocio(resource.data.negocioId) ||
+        // Autoatendimento: a própria cliente pode preencher a anamnese, o
+        // TCLE e o responsável legal (se for menor) pelo painel dela — mas
+        // só esses três campos. affectedKeys().hasOnly(...) impede que ela
+        // aproveite pra alterar negocioId, nome ou qualquer outro campo do
+        // próprio cadastro.
+        (logado() && resource.data.clienteUid == request.auth.uid &&
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['anamnese', 'tcle', 'responsavelLegal']));
+      allow delete: if ehDoMeuNegocio(resource.data.negocioId);
     }
 
     // Cabines: leitura aberta só à cliente cadastrada NESSE negócio (pra

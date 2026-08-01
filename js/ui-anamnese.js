@@ -4,10 +4,8 @@
 import {
   ehMenorDeIdade, salvarAnamnese, obterAnamnese,
   salvarResponsavelLegal, obterResponsavelLegal,
-  registrarAceiteTcle, obterUltimoAceiteTcle
+  registrarAceiteTcle, obterUltimoAceiteTcle, TEXTO_TCLE_PADRAO
 } from "./anamnese.js?v=20260731a";
-
-const TEXTO_TCLE_PADRAO = "Declaro estar ciente dos riscos do procedimento de tatuagem (reações alérgicas, infecção se os cuidados pós-sessão não forem seguidos, variação de cor com o tempo) e autorizo sua realização.";
 
 // Estado em nível de módulo (não por chamada de initModalAnamnese) — assim
 // o botão de salvar, ligado uma única vez, sempre enxerga a cliente aberta

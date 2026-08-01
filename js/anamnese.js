@@ -7,6 +7,10 @@ import {
 // Idade mínima pra tatuar sem responsável (varia por lei estadual/municipal — ajustável).
 export const IDADE_MINIMA_SEM_RESPONSAVEL = 18;
 
+// Texto padrão do TCLE — usado tanto no preenchimento pelo tatuador(a)
+// (ui-anamnese.js) quanto no autoatendimento da cliente (cliente.html).
+export const TEXTO_TCLE_PADRAO = "Declaro estar ciente dos riscos do procedimento de tatuagem (reações alérgicas, infecção se os cuidados pós-sessão não forem seguidos, variação de cor com o tempo) e autorizo sua realização.";
+
 // Intervalo mínimo recomendado entre sessões da mesma tatuagem, pra dar tempo
 // de cicatrização antes da próxima etapa/retoque.
 export const INTERVALO_MINIMO_HORAS_PADRAO = 24 * 15; // ~15 dias
