@@ -1691,6 +1691,7 @@ $('link-esqueci-senha').addEventListener('click', async (e) => {
 // tem nada em andamento pra perder). Os navegadores não deixam customizar
 // o texto do aviso por segurança.
 let confirmarSairAtiva = false;
+let tutorialIniciadoNestaSessao = false;
 function ativarConfirmacaoAoSair() {
   if (confirmarSairAtiva) return;
   confirmarSairAtiva = true;
@@ -1704,6 +1705,7 @@ onAuthChange((usuario, motivo) => {
   $('tela-carregando').style.display = 'none';
   if (!usuario) {
     pararTodosOsListeners();
+    tutorialIniciadoNestaSessao = false;
     $('tela-login').style.display = 'flex';
     $('painel').style.display = 'none';
     if (motivo === 'sem-cadastro') {
@@ -1722,12 +1724,6 @@ onAuthChange((usuario, motivo) => {
   initNovidades();
   ativarConfirmacaoAoSair();
   ativarConfirmacaoAoSair();
-
-  if (!tutorialJaVisto(usuario.uid)) {
-    iniciarTutorial(usuario.uid, (abaId) => {
-      document.querySelector(`[data-aba="${abaId}"]`)?.click();
-    });
-  }
 });
 
 $('btn-ajuda').addEventListener('click', () => {
@@ -1863,6 +1859,15 @@ function verificarAssinatura(config) {
   } else {
     $('tela-vencida').style.display = 'none';
     $('painel').style.display = 'block';
+    // Só dispara o tour a partir daqui — antes disso o acesso pode ainda
+    // estar bloqueado (cadastro pendente/assinatura vencida), e não faz
+    // sentido guiar por um painel que o dono nem consegue usar ainda.
+    if (!tutorialIniciadoNestaSessao && !tutorialJaVisto(usuarioAtual.uid)) {
+      tutorialIniciadoNestaSessao = true;
+      iniciarTutorial(usuarioAtual.uid, (abaId) => {
+        document.querySelector(`[data-aba="${abaId}"]`)?.click();
+      });
+    }
   }
 }
 
