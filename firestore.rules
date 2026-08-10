@@ -23,7 +23,7 @@ service cloud.firestore {
     }
 
     function ehAdmin() {
-      return logado() && request.auth.uid == "vzgts23koAWeJeJ6ojMVdsLRJkJ3";
+      return logado() && request.auth.uid == "1nMVCKQqPFaLFdCYrQFOL9LamHl2";
     }
 
     // negocioId da cliente autenticada, se ela tiver o mapeamento em
