@@ -1,7 +1,7 @@
 // Pro'Ink — UID do administrador geral do sistema
 // Se quiser usar outra conta como admin, troque o valor abaixo pelo
 // UID correto (Firebase Console → Authentication → Users).
-export const ADMIN_UID = "vzgts23koAWeJeJ6ojMVdsLRJkJ3";
+export const ADMIN_UID = "1nMVCKQqPFaLFdCYrQFOL9LamHl2";
 
 // Dados da plataforma (você, o dono do Pro'Ink) usados na tela de
 // cobrança quando o teste grátis de um negócio vence.
