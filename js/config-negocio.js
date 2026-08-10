@@ -13,7 +13,7 @@ export function configPadrao() {
     intervaloMinimoHoras: INTERVALO_MINIMO_HORAS_PADRAO,
     limiteSessoesMes: LIMITE_SESSOES_MES_PADRAO,
     metaMensal: 0,
-    corDestaque: "#C68642",
+    corDestaque: "#D9D9D9",
     logoEmoji: "☀️",
     logoUrl: "",
     // Código secreto do link de autocadastro de equipe — diferente do

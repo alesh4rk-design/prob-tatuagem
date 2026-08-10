@@ -6,16 +6,16 @@
 <title>Pro'Ink — Sistema de Gestão para Estúdios de Tatuagem</title>
 <link rel="icon" href="icons/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
-<meta name="theme-color" content="#C68642">
+<meta name="theme-color" content="#121212">
 <meta name="description" content="O sistema que organiza seu estúdio de tatuagem: agenda, cabines, ficha de pele, pacotes de sessões e financeiro — tudo no celular.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-    --bg:#1a1410;--card:#241c16;--card2:#1e1712;--border:rgba(245,230,211,.14);
-    --accent:#C68642;--accent-light:#E8B87D;--green:#7BA05B;--red:#C1554A;--yellow:#D9A441;
-    --text:#F5E6D3;--muted:#B8A48C;--accent-rgb:198,134,66;
+    --bg:#121212;--card:#1C1C1C;--card2:#181818;--border:rgba(255,255,255,.14);
+    --accent:#D9D9D9;--accent-light:#FFFFFF;--green:#7BA05B;--red:#C1554A;--yellow:#D9A441;
+    --text:#F2F2F2;--muted:#9E9E9E;--accent-rgb:217,217,217;
     --font:'Inter',system-ui,sans-serif;--font-display:'Space Grotesk','Inter',system-ui,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -35,13 +35,13 @@ img{max-width:100%;display:block;}
         radial-gradient(ellipse 70% 45% at 50% -5%, rgba(var(--accent-rgb),.22) 0%, transparent 55%),
         radial-gradient(ellipse 55% 35% at 12% 85%, rgba(var(--accent-rgb),.10) 0%, transparent 60%),
         radial-gradient(ellipse 55% 35% at 90% 70%, rgba(123,160,91,.07) 0%, transparent 60%),
-        linear-gradient(180deg,#120d09 0%,#1a1410 25%,#221a13 55%,#160f0a 80%,#0c0805 100%);
+        linear-gradient(180deg,#0a0a0a 0%,#121212 25%,#1a1a1a 55%,#0e0e0e 80%,#050505 100%);
 }
 
 /* ══ nav ══ */
 nav{
     position:sticky;top:0;z-index:100;
-    background:rgba(20,15,10,.85);backdrop-filter:blur(10px);
+    background:rgba(10,10,10,.85);backdrop-filter:blur(10px);
     border-bottom:1px solid var(--border);
 }
 nav .wrap{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;}
@@ -102,7 +102,7 @@ h1 .hl{color:var(--accent-light);}
 }
 .preview-topbar{
     display:flex;align-items:center;gap:.4rem;padding:.7rem 1rem;
-    border-bottom:1px solid var(--border);background:rgba(20,15,10,.6);
+    border-bottom:1px solid var(--border);background:rgba(10,10,10,.6);
 }
 .preview-dot{width:9px;height:9px;border-radius:50%;background:var(--border);}
 .preview-body{padding:1.4rem;display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;}
